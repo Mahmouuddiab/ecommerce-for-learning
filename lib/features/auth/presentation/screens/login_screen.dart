@@ -2,6 +2,7 @@ import 'package:ecommerce/core/params/login_params.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
+import 'package:ecommerce/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/auth_text_field.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/option_row.dart';
@@ -86,10 +87,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   SizedBox(height: 50.h),
                   // App Logo centered
                   Center(
-                    child: SvgPicture.asset(
-                      "assets/logo.svg",
-                      width: 200.w,
-                    ),
+                    child: SvgPicture.asset("assets/logo.svg", width: 200.w),
                   ),
                   SizedBox(height: 70.h),
 
@@ -138,7 +136,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () {
-                        // TODO: Implement forgot password action
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ForgotPasswordScreen(),
+                          ),
+                        );
                       },
                       child: Text(
                         "Forgot password",
@@ -168,7 +171,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onTap: () {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                          MaterialPageRoute(
+                            builder: (context) => const SignUpScreen(),
+                          ),
                         );
                       },
                     ),
