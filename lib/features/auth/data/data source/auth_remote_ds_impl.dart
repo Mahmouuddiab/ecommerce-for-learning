@@ -8,6 +8,8 @@ import 'package:ecommerce/core/params/register_params.dart';
 import 'package:ecommerce/features/auth/data/data%20source/auth_remote_ds.dart';
 import 'package:ecommerce/features/auth/data/models/forgot_password_model.dart';
 import 'package:ecommerce/features/auth/data/models/user_model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AuthRemoteDsImpl implements AuthRemoteDs {
   @override
@@ -21,19 +23,28 @@ class AuthRemoteDsImpl implements AuthRemoteDs {
         },
       );
 
-      // FIX: Ensure you match the API response structure.
-      // RouteMisr typically puts user data directly or inside a wrapper.
       final user = UserModel.fromJson(response.data);
 
-      // Safely extract the token
-      final token = user.token;
+      // Decode JWT
+      final decodedToken = JwtDecoder.decode(user.token);
 
-      if (token != null && token.isNotEmpty) {
-        await CacheHelper.saveToken(token);
+      debugPrint('JWT Payload: $decodedToken');
+
+      // Try common keys for the user id
+      final userId =
+          decodedToken['id'] ??
+              decodedToken['_id'] ??
+              decodedToken['sub'];
+
+      if (userId != null) {
+        debugPrint('User ID: $userId');
+
+        await CacheHelper.saveUserId(userId.toString());
       } else {
-        // Optional: Handle scenarios where login succeeded but no token returned
-        throw const ServerException('Authentication token missing from server response');
+        debugPrint('User ID not found in JWT.');
       }
+
+      await CacheHelper.saveToken(user.token);
 
       return user;
     } on DioException catch (e) {
