@@ -6,6 +6,7 @@ import 'package:ecommerce/core/network/dio_helper.dart';
 import 'package:ecommerce/core/params/login_params.dart';
 import 'package:ecommerce/core/params/register_params.dart';
 import 'package:ecommerce/features/auth/data/data%20source/auth_remote_ds.dart';
+import 'package:ecommerce/features/auth/data/models/forgot_password_model.dart';
 import 'package:ecommerce/features/auth/data/models/user_model.dart';
 
 class AuthRemoteDsImpl implements AuthRemoteDs {
@@ -91,6 +92,26 @@ class AuthRemoteDsImpl implements AuthRemoteDs {
           throw const NetworkException();
         }
         throw ServerException(message ?? 'Server error occurred');
+    }
+  }
+
+  @override
+  Future<ForgotPasswordModel> forgotPassword(String email) async {
+    try {
+      final response = await DioHelper.post(
+        path: ApiConstants.forgotPassword,
+        data: {
+          "email": email,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return ForgotPasswordModel.fromJson(response.data);
+      } else {
+        throw Exception(response.data['message'] ?? 'Something went wrong');
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }
