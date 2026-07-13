@@ -1,6 +1,7 @@
 import 'package:ecommerce/core/params/login_params.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
+import 'package:ecommerce/features/auth/domain/entities/user_entity.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
 import 'package:ecommerce/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/sign_up_screen.dart';
@@ -48,10 +49,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ref.listen<AsyncValue>(authControllerProvider, (previous, next) {
       next.when(
         data: (user) {
-          if (user != null) {
+          if (user is UserEntity) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Welcome back! 🎉'),
+               SnackBar(
+                content: Text(user.message),
                 backgroundColor: Colors.green,
               ),
             );
