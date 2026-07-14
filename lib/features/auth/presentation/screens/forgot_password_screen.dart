@@ -2,12 +2,14 @@ import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
 import 'package:ecommerce/features/auth/domain/entities/forgot_password.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
+import 'package:ecommerce/features/auth/presentation/screens/verify_code_screen.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/auth_text_field.dart';
 import 'package:ecommerce/shared/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -17,8 +19,7 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
       _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState
-    extends ConsumerState<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
@@ -31,9 +32,9 @@ class _ForgotPasswordScreenState
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
 
-    ref.read(authControllerProvider.notifier).forgotPassword(
-      _emailController.text.trim(),
-    );
+    ref
+        .read(authControllerProvider.notifier)
+        .forgotPassword(_emailController.text.trim());
   }
 
   @override
@@ -49,16 +50,21 @@ class _ForgotPasswordScreenState
               ),
             );
 
-            // TODO: Navigate to Verify Reset Code Screen
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (context.mounted) {
+                context.goNamed(
+                  'verify-code',
+                  extra: _emailController.text.trim(),
+                );
+              }
+            });
           }
         },
         loading: () {},
         error: (error, stackTrace) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                error.toString().replaceFirst('Exception: ', ''),
-              ),
+              content: Text(error.toString().replaceFirst('Exception: ', '')),
               backgroundColor: Colors.red,
             ),
           );
@@ -87,10 +93,7 @@ class _ForgotPasswordScreenState
                 SizedBox(height: 20.h),
 
                 Center(
-                  child: SvgPicture.asset(
-                    "assets/logo.svg",
-                    width: 200.w,
-                  ),
+                  child: SvgPicture.asset("assets/logo.svg", width: 200.w),
                 ),
 
                 SizedBox(height: 60.h),
@@ -108,10 +111,7 @@ class _ForgotPasswordScreenState
 
                 Text(
                   "Enter your email address to receive a reset code.",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14.sp,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 14.sp),
                 ),
 
                 SizedBox(height: 70.h),
