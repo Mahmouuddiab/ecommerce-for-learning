@@ -1,8 +1,8 @@
 import 'package:ecommerce/core/params/register_params.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
+import 'package:ecommerce/features/auth/domain/entities/user_entity.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
-import 'package:ecommerce/features/auth/presentation/screens/login_screen.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/auth_text_field.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/option_row.dart';
 import 'package:ecommerce/shared/primary_button.dart';
@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -56,14 +57,18 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     ref.listen<AsyncValue>(authControllerProvider, (previous, next) {
       next.when(
         data: (user) {
-          if (user != null) {
+          if (user is UserEntity) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Account created successfully 🎉'),
+              SnackBar(
+                content: Text(user.message),
                 backgroundColor: Colors.green,
               ),
             );
-            // TODO: Navigate to Home or Login Screen
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (context.mounted) {
+                context.goNamed('login');
+              }
+            });
           }
         },
         loading: () {},
@@ -150,10 +155,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     questionText: "Already have an account? ",
                     actionText: "Login",
                     onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      );
+                      context.goNamed('login');
                     },
                   ),
                   SizedBox(height: 20.h),
