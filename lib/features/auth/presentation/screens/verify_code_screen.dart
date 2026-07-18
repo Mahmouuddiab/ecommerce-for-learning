@@ -1,7 +1,6 @@
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/auth/domain/entities/verify_code_entity.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
-import 'package:ecommerce/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:ecommerce/shared/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

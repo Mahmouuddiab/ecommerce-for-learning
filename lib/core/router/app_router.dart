@@ -1,3 +1,4 @@
+import 'package:ecommerce/core/screens/splash_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/login_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/reset_password_screen.dart';
@@ -11,8 +12,14 @@ import 'package:go_router/go_router.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/splash',
     routes: [
+      GoRoute(
+        path: '/splash',
+        name: 'splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
+
       GoRoute(
         path: '/login',
         name: 'login',
@@ -54,6 +61,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
+
     ],
 
     errorBuilder: (context, state) => Scaffold(

@@ -1,12 +1,12 @@
 import 'package:ecommerce/core/params/login_params.dart';
+import 'package:ecommerce/core/screens/main_navigation_screen.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
 import 'package:ecommerce/features/auth/domain/entities/user_entity.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
-import 'package:ecommerce/features/auth/presentation/screens/forgot_password_screen.dart';
-import 'package:ecommerce/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/auth_text_field.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/option_row.dart';
+import 'package:ecommerce/features/home/presentation/screens/home_screen.dart';
 import 'package:ecommerce/shared/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,7 +57,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 backgroundColor: Colors.green,
               ),
             );
-            // TODO: Navigate to Home Screen
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (context.mounted) {
+               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MainNavigationScreen()));
+              }
+            });
           }
         },
         loading: () {},
@@ -114,8 +118,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                   // Email/User Name Field
                   AuthTextField(
-                    label: "User Name",
-                    hint: "enter your name",
+                    label: "Email",
+                    hint: "enter your email",
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (v) => AppValidator.email(v ?? ''),
