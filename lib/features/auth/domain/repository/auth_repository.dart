@@ -7,8 +7,12 @@ import 'package:ecommerce/features/auth/domain/entities/verify_code_entity.dart'
 
 abstract class AuthRepository {
   Future<UserEntity> signUp(RegisterParams params);
+
   Future<UserEntity> signIn(LoginParams params);
+
   Future<ForgotPasswordEntity> forgotPassword(String email);
+
   Future<VerifyCodeEntity> verifyCode(String code);
-  Future<ResetPasswordEntity> resetPassword(String email,String newPassword);
+
+  Future<ResetPasswordEntity> resetPassword(String email, String newPassword);
 }

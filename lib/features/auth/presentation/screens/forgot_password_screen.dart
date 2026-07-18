@@ -2,7 +2,6 @@ import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
 import 'package:ecommerce/features/auth/domain/entities/forgot_password.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
-import 'package:ecommerce/features/auth/presentation/screens/verify_code_screen.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/auth_text_field.dart';
 import 'package:ecommerce/shared/primary_button.dart';
 import 'package:flutter/material.dart';
