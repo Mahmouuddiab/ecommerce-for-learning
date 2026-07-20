@@ -9,4 +9,8 @@ class ApiConstants {
   static const String resetPassword = '$baseUrl/auth/resetPassword';
   static const String categories = '$baseUrl/categories';
   static const String brands = '$baseUrl/brands';
+  static String subcategoriesByCategoryId(String categoryId) =>
+      '$baseUrl/subcategories?category=$categoryId';
+  static String productsBySubCategoryId(String subCategoryId) =>
+      '$baseUrl/products?subcategory=$subCategoryId';
 }

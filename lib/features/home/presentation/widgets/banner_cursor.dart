@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BannerCursor extends StatefulWidget {
@@ -85,8 +86,8 @@ class _BannerCursorState extends State<BannerCursor> {
               height: 8,
               decoration: BoxDecoration(
                 color: _currentPage == index
-                    ? Colors.blue
-                    : Colors.grey.shade400,
+                    ? AppColors.primary
+                    : AppColors.border,
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
