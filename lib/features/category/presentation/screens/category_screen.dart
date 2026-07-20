@@ -1,275 +1,254 @@
+import 'package:collection/collection.dart';
+import 'package:ecommerce/core/utils/app_colors.dart';
+import 'package:ecommerce/features/category/presentation/providers/category_providers.dart';
+import 'package:ecommerce/features/category/presentation/screens/sub_category_products_screen.dart';
+import 'package:ecommerce/features/category/presentation/widgets/category_sidebar.dart';
+import 'package:ecommerce/features/category/presentation/widgets/promo_banner.dart';
+import 'package:ecommerce/features/category/presentation/widgets/sub_category_grid.dart';
+import 'package:ecommerce/features/home/presentation/providers/home_providers.dart';
+import 'package:ecommerce/shared/app_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CategoryScreen extends StatelessWidget {
+/// State Provider to hold the currently selected active category ID
+final selectedCategoryIdProvider = StateProvider<String?>((ref) => null);
+
+class CategoryScreen extends ConsumerWidget {
   const CategoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categoriesAsync = ref.watch(homeCategoriesProvider);
+    final selectedId = ref.watch(selectedCategoryIdProvider);
+
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: const Text('Categories', style: TextStyle(fontWeight: FontWeight.bold)),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      ),
+      backgroundColor: AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 7.w),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Search Bar
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search categories...',
-                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+              AppHeader(
+                cartItemCount: 0,
+                onCartTap: () {
+                  // TODO: Navigate to cart
+                },
+                onSearchChanged: (query) {
+                  // TODO: Implement search behavior
+                },
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 7.h),
+              Expanded(
+                child: categoriesAsync.when(
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (error, _) => _ErrorState(
+                    message: error.toString(),
+                    onRetry: () => ref.invalidate(homeCategoriesProvider),
+                  ),
+                  data: (categories) {
+                    if (categories.isEmpty) {
+                      return const Center(child: Text('No categories found.'));
+                    }
 
-              // Section Title
-              const Text(
-                'All Categories',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
+                    // Default to first category if none selected
+                    final activeId = selectedId ?? categories.first.id;
 
-              // Inlined Category Grid (2 columns)
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 1.1, // Adjusted aspect ratio for grid items
-                children: [
-                  // Category Card 1: Development
-                  Card(
-                    elevation: 0,
-                    color: Colors.blue[50],
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(12)),
-                              child: const Icon(Icons.code, color: Colors.white, size: 24),
-                            ),
-                            const Spacer(),
-                            const Text('Development', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
-                            const SizedBox(height: 4),
-                            Text('142 Items', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-                          ],
+                    // Find active category entity to read its name
+                    final activeCategory = categories.firstWhereOrNull(
+                          (c) => c.id == activeId,
+                    ) ??
+                        categories.first;
+
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Left Pane: Category Selection Sidebar
+                        CategorySidebar(
+                          categories: categories,
+                          selectedId: activeId,
+                          onCategorySelected: (id) {
+                            ref.read(selectedCategoryIdProvider.notifier).state = id;
+                          },
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // Category Card 2: Design
-                  Card(
-                    elevation: 0,
-                    color: Colors.purple[50],
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(color: Colors.purple, borderRadius: BorderRadius.circular(12)),
-                              child: const Icon(Icons.palette_outlined, color: Colors.white, size: 24),
+                        // Right Pane: Dynamic Subcategories & Banner
+                        Expanded(
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 220),
+                            switchInCurve: Curves.easeOut,
+                            switchOutCurve: Curves.easeIn,
+                            transitionBuilder: (child, animation) => FadeTransition(
+                              opacity: animation,
+                              child: child,
                             ),
-                            const Spacer(),
-                            const Text('Design', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
-                            const SizedBox(height: 4),
-                            Text('98 Items', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Category Card 3: Marketing
-                  Card(
-                    elevation: 0,
-                    color: Colors.orange[50],
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(12)),
-                              child: const Icon(Icons.trending_up, color: Colors.white, size: 24),
+                            child: _CategoryContentSection(
+                              key: ValueKey(activeId),
+                              categoryId: activeId,
+                              categoryName: activeCategory.name,
                             ),
-                            const Spacer(),
-                            const Text('Marketing', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
-                            const SizedBox(height: 4),
-                            Text('64 Items', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // Category Card 4: Business
-                  Card(
-                    elevation: 0,
-                    color: Colors.green[50],
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(12)),
-                              child: const Icon(Icons.attach_money, color: Colors.white, size: 24),
-                            ),
-                            const Spacer(),
-                            const Text('Business', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
-                            const SizedBox(height: 4),
-                            Text('110 Items', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Category Card 5: Photography
-                  Card(
-                    elevation: 0,
-                    color: Colors.pink[50],
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(color: Colors.pink, borderRadius: BorderRadius.circular(12)),
-                              child: const Icon(Icons.camera_alt_outlined, color: Colors.white, size: 24),
-                            ),
-                            const Spacer(),
-                            const Text('Photography', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
-                            const SizedBox(height: 4),
-                            Text('45 Items', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Category Card 6: Music
-                  Card(
-                    elevation: 0,
-                    color: Colors.teal[50],
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(color: Colors.teal, borderRadius: BorderRadius.circular(12)),
-                              child: const Icon(Icons.music_note, color: Colors.white, size: 24),
-                            ),
-                            const Spacer(),
-                            const Text('Music', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
-                            const SizedBox(height: 4),
-                            Text('32 Items', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 28),
-
-              // Secondary Section Title
-              const Text(
-                'Trending Topics',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-
-              // Inlined Trending List Item 1
-              Card(
-                elevation: 0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: const ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.amber,
-                    child: Icon(Icons.local_fire_department, color: Colors.white),
-                  ),
-                  title: Text('Artificial Intelligence', style: TextStyle(fontWeight: FontWeight.w600)),
-                  subtitle: Text('Trending hot macro category'),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              // Inlined Trending List Item 2
-              Card(
-                elevation: 0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: const ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.indigo,
-                    child: Icon(Icons.cloud_queue, color: Colors.white),
-                  ),
-                  title: Text('Cloud Computing', style: TextStyle(fontWeight: FontWeight.w600)),
-                  subtitle: Text('High workspace demand'),
-                  trailing: Icon(Icons.chevron_right, color: Colors.grey),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Right-hand pane displaying selected category name, promo banner, and subcategories
+class _CategoryContentSection extends ConsumerWidget {
+  final String categoryId;
+  final String categoryName;
+
+  const _CategoryContentSection({
+    super.key,
+    required this.categoryId,
+    required this.categoryName,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Fetch sub-categories dynamically using your family provider
+    final subCategoriesAsync = ref.watch(subCategoriesProvider(categoryId));
+
+    return subCategoriesAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, _) => _ErrorState(
+        message: error.toString(),
+        onRetry: () => ref.invalidate(subCategoriesProvider(categoryId)),
+      ),
+      data: (subCategories) {
+        return RefreshIndicator(
+          color: AppColors.primary,
+          onRefresh: () async {
+            ref.invalidate(subCategoriesProvider(categoryId));
+            await ref.read(subCategoriesProvider(categoryId).future);
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Selected Category Title Header
+                Padding(
+                  padding: EdgeInsets.only(left: 12.w, top: 8.h, bottom: 8.h),
+                  child: Text(
+                    categoryName,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+
+                // 2. Promo Banner
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: PromoBanner(
+                    title: 'Up to 50% Off',
+                    imageUrl: '', // Optional: pass default banner URL or entity image
+                    ctaLabel: 'Shop Now',
+                    onShopNowTap: () {
+                      // TODO: Navigate to full category listing
+                    },
+                  ),
+                ),
+                SizedBox(height: 8.h),
+
+                // 3. Subcategories Grid or Empty State
+                if (subCategories.isEmpty)
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 48.h),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.category_outlined,
+                            size: 36.sp,
+                            color: AppColors.textSecondary,
+                          ),
+                          SizedBox(height: 8.h),
+                          Text(
+                            'No sub-categories available.',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  SubCategoryGrid(
+                    items: subCategories,
+                    onItemTap: (item) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SubCategoryProductsScreen(
+                            subCategoryId: item.id,
+                            subCategoryName: item.name,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                SizedBox(height: 16.h),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Reusable Error State Widget with Retry Action
+class _ErrorState extends StatelessWidget {
+  final String message;
+  final VoidCallback onRetry;
+
+  const _ErrorState({required this.message, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(24.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: AppColors.textSecondary,
+              size: 32.sp,
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            SizedBox(height: 12.h),
+            OutlinedButton(
+              onPressed: onRetry,
+              child: const Text('Retry'),
+            ),
+          ],
         ),
       ),
     );

@@ -9,7 +9,8 @@ abstract class AppColors {
   // Backgrounds
   static const Color scaffoldBackground = Color(0xFF1A1A1A);
   static const Color cardBackground = primary;
-  static const Color inputFill = Colors.white;
+  static const Color white = Colors.white;
+  static const Color searchFieldBg = Colors.white; // Added missing search field background
   static const Color grey100 = Color(0xFFF5F5F5);
 
   // Text
@@ -34,4 +35,13 @@ abstract class AppColors {
   // Utility
   static const Color transparent = Colors.transparent;
   static const Color shadow = Color(0x1A000000);
+
+  static const Color background = Color(0xFFFFFFFF);
+  static const Color sidebarBg = Color(0xFFF4F6F9);
+  static const Color chipBg = Color(0xFFF3F4F6);
+  static const Color cccc = Color(0xFFEDF1F5);
+  static const List<Color> bannerGradient = [
+    Color(0xFF2F6FED),
+    Color(0xFF1E3A8A),
+  ];
 }
