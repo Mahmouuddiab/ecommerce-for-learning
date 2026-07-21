@@ -1,17 +1,16 @@
 import 'package:ecommerce/core/network/api_constant.dart';
 import 'package:ecommerce/core/network/dio_helper.dart';
 import 'package:ecommerce/core/router/app_router.dart';
+import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
   DioHelper.init(
     baseUrl: ApiConstants.baseUrl,
   );
-
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -35,6 +34,11 @@ class MyApp extends ConsumerWidget {
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.deepPurple,
+            ),
+            appBarTheme: AppBarThemeData(
+              iconTheme: IconThemeData(
+                color: AppColors.primary
+              )
             ),
             useMaterial3: true,
           ),

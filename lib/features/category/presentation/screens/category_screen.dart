@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
+import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/presentation/providers/category_providers.dart';
-import 'package:ecommerce/features/category/presentation/screens/sub_category_products_screen.dart';
 import 'package:ecommerce/features/category/presentation/widgets/category_sidebar.dart';
 import 'package:ecommerce/features/category/presentation/widgets/promo_banner.dart';
 import 'package:ecommerce/features/category/presentation/widgets/sub_category_grid.dart';
@@ -9,11 +9,23 @@ import 'package:ecommerce/features/home/presentation/providers/home_providers.da
 import 'package:ecommerce/shared/app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
-/// State Provider to hold the currently selected active category ID
-final selectedCategoryIdProvider = StateProvider<String?>((ref) => null);
+/// Notifier Provider to manage the selected category ID
+class SelectedCategoryIdNotifier extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void selectCategory(String id) {
+    state = id;
+  }
+}
+
+final selectedCategoryIdProvider =
+NotifierProvider<SelectedCategoryIdNotifier, String?>(
+  SelectedCategoryIdNotifier.new,
+);
 
 class CategoryScreen extends ConsumerWidget {
   const CategoryScreen({super.key});
@@ -22,6 +34,7 @@ class CategoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categoriesAsync = ref.watch(homeCategoriesProvider);
     final selectedId = ref.watch(selectedCategoryIdProvider);
+    final cartItemCount = ref.watch(cartCountProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -31,9 +44,9 @@ class CategoryScreen extends ConsumerWidget {
           child: Column(
             children: [
               AppHeader(
-                cartItemCount: 0,
+                cartItemCount: cartItemCount,
                 onCartTap: () {
-                  // TODO: Navigate to cart
+                  context.push('/cart');
                 },
                 onSearchChanged: (query) {
                   // TODO: Implement search behavior
@@ -42,7 +55,8 @@ class CategoryScreen extends ConsumerWidget {
               SizedBox(height: 7.h),
               Expanded(
                 child: categoriesAsync.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                  const Center(child: CircularProgressIndicator()),
                   error: (error, _) => _ErrorState(
                     message: error.toString(),
                     onRetry: () => ref.invalidate(homeCategoriesProvider),
@@ -56,10 +70,9 @@ class CategoryScreen extends ConsumerWidget {
                     final activeId = selectedId ?? categories.first.id;
 
                     // Find active category entity to read its name
-                    final activeCategory = categories.firstWhereOrNull(
-                          (c) => c.id == activeId,
-                    ) ??
-                        categories.first;
+                    final activeCategory =
+                        categories.firstWhereOrNull((c) => c.id == activeId) ??
+                            categories.first;
 
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +82,9 @@ class CategoryScreen extends ConsumerWidget {
                           categories: categories,
                           selectedId: activeId,
                           onCategorySelected: (id) {
-                            ref.read(selectedCategoryIdProvider.notifier).state = id;
+                            ref
+                                .read(selectedCategoryIdProvider.notifier)
+                                .selectCategory(id);
                           },
                         ),
                         // Right Pane: Dynamic Subcategories & Banner
@@ -78,10 +93,11 @@ class CategoryScreen extends ConsumerWidget {
                             duration: const Duration(milliseconds: 220),
                             switchInCurve: Curves.easeOut,
                             switchOutCurve: Curves.easeIn,
-                            transitionBuilder: (child, animation) => FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            ),
+                            transitionBuilder: (child, animation) =>
+                                FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                ),
                             child: _CategoryContentSection(
                               key: ValueKey(activeId),
                               categoryId: activeId,
@@ -115,7 +131,7 @@ class _CategoryContentSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Fetch sub-categories dynamically using your family provider
+    // Fetch sub-categories dynamically using family provider
     final subCategoriesAsync = ref.watch(subCategoriesProvider(categoryId));
 
     return subCategoriesAsync.when(
@@ -156,7 +172,7 @@ class _CategoryContentSection extends ConsumerWidget {
                   padding: EdgeInsets.symmetric(horizontal: 12.w),
                   child: PromoBanner(
                     title: 'Up to 50% Off',
-                    imageUrl: '', // Optional: pass default banner URL or entity image
+                    imageUrl: '',
                     ctaLabel: 'Shop Now',
                     onShopNowTap: () {
                       // TODO: Navigate to full category listing
@@ -193,14 +209,12 @@ class _CategoryContentSection extends ConsumerWidget {
                   SubCategoryGrid(
                     items: subCategories,
                     onItemTap: (item) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SubCategoryProductsScreen(
-                            subCategoryId: item.id,
-                            subCategoryName: item.name,
-                          ),
-                        ),
+                      context.push(
+                        '/sub-category-products',
+                        extra: {
+                          'subCategoryId': item.id,
+                          'subCategoryName': item.name,
+                        },
                       );
                     },
                   ),
@@ -244,10 +258,7 @@ class _ErrorState extends StatelessWidget {
               ),
             ),
             SizedBox(height: 12.h),
-            OutlinedButton(
-              onPressed: onRetry,
-              child: const Text('Retry'),
-            ),
+            OutlinedButton(onPressed: onRetry, child: const Text('Retry')),
           ],
         ),
       ),
