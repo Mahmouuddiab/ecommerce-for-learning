@@ -1,15 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:ecommerce/core/cache/cache_helper.dart';
+
 class AuthInterceptor extends Interceptor {
   @override
   Future<void> onRequest(
       RequestOptions options,
       RequestInterceptorHandler handler,
       ) async {
-    final token = await CacheHelper.getToken();
+    final bool withAuth = options.extra['withAuth'] ?? false;
 
-    if (token?.isNotEmpty ?? false) {
-      options.headers['Authorization'] = 'Bearer $token';
+    if (withAuth) {
+      final token = await CacheHelper.getToken();
+
+      if (token != null && token.isNotEmpty) {
+        // RouteMisr requires 'token' as the key header instead of 'Authorization: Bearer ...'
+        options.headers['token'] = token;
+      }
     }
 
     options.headers['Accept'] = 'application/json';
@@ -25,9 +31,7 @@ class AuthInterceptor extends Interceptor {
       ) async {
     if (err.response?.statusCode == 401) {
       await CacheHelper.clearToken();
-
-      // Optionally navigate the user to the login screen
-      // or refresh the access token here.
+      // Optionally handle navigation or session clearing here
     }
 
     handler.next(err);

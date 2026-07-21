@@ -1,9 +1,12 @@
 import 'package:ecommerce/core/utils/app_colors.dart';
+import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/domain/entities/product_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
-class ProductDetailsScreen extends StatefulWidget {
+class ProductDetailsScreen extends ConsumerStatefulWidget {
   final ProductEntity product;
 
   const ProductDetailsScreen({
@@ -12,10 +15,10 @@ class ProductDetailsScreen extends StatefulWidget {
   });
 
   @override
-  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+  ConsumerState<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
   int _currentImageIndex = 0;
   int _quantity = 1;
   bool _isExpanded = false;
@@ -34,11 +37,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 1. Listen for cart operation status (Snackbar notifications)
+    ref.listen<AddToCartState>(cartControllerProvider, (previous, next) {
+      if (next is AddToCartSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Added to cart successfully! (${next.cartResponse.numOfCartItems} items)',
+            ),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      } else if (next is AddToCartError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.message),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    });
+
     final num effectivePrice =
         widget.product.priceAfterDiscount ?? widget.product.price;
     final List<String> imageList = widget.product.images.isNotEmpty
         ? widget.product.images
         : [widget.product.imageCover];
+
+    final cartState = ref.watch(cartControllerProvider);
+    final isAddingToCart = cartState is AddToCartLoading;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -63,11 +92,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             icon: Icon(Icons.search, color: const Color(0xFF004182), size: 27.sp),
             onPressed: () {},
           ),
-          IconButton(
-            icon: Icon(Icons.shopping_cart_outlined,
-                color: const Color(0xFF004182), size: 27.sp),
-            onPressed: () {},
+          // Dynamic Cart Badge Count Widget
+          Consumer(
+            builder: (context, ref, child) {
+              final cartCount = ref.watch(cartCountProvider);
+
+              return Badge(
+                isLabelVisible: cartCount > 0,
+                label: Text(
+                  '$cartCount',
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: Colors.red,
+                offset: const Offset(-4, 4),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.shopping_cart_outlined,
+                    color: const Color(0xFF004182),
+                    size: 27.sp,
+                  ),
+                  onPressed: () {
+                    context.push('/cart');
+                  },
+                ),
+              );
+            },
           ),
+          SizedBox(width: 8.w),
         ],
       ),
       body: Column(
@@ -348,8 +403,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 SizedBox(width: 24.w),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add to cart action
+                    onPressed: isAddingToCart
+                        ? null
+                        : () {
+                      // Trigger CartController action
+                      ref
+                          .read(cartControllerProvider.notifier)
+                          .addToCart(widget.product.id);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF004182),
@@ -358,7 +418,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         borderRadius: BorderRadius.circular(25.r),
                       ),
                     ),
-                    child: Row(
+                    child: isAddingToCart
+                        ? SizedBox(
+                      height: 20.sp,
+                      width: 20.sp,
+                      child: const CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                        : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.add_shopping_cart,

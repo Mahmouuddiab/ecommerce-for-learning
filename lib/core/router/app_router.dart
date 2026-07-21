@@ -4,6 +4,10 @@ import 'package:ecommerce/features/auth/presentation/screens/login_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/verify_code_screen.dart';
+import 'package:ecommerce/features/cart/presentation/screens/cart_screen.dart';
+import 'package:ecommerce/features/category/domain/entities/product_entity.dart';
+import 'package:ecommerce/features/category/presentation/screens/product_details_screen.dart';
+import 'package:ecommerce/features/category/presentation/screens/sub_category_products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -58,6 +62,33 @@ final routerProvider = Provider<GoRouter>((ref) {
 
           return ResetPasswordScreen(
             email: email,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: '/cart',
+        name: 'cart',
+        builder: (context, state) => const CartScreen(),
+      ),
+
+      GoRoute(
+        path: '/product-details',
+        name: 'product-details',
+        builder: (context, state) {
+          final product = state.extra as ProductEntity;
+          return ProductDetailsScreen(product: product);
+        },
+      ),
+
+      GoRoute(
+        path: '/sub-category-products',
+        name: 'sub-category-products',
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return SubCategoryProductsScreen(
+            subCategoryId: args['subCategoryId'] as String,
+            subCategoryName: args['subCategoryName'] as String,
           );
         },
       ),

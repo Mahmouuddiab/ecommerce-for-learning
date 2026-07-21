@@ -1,10 +1,11 @@
 import 'package:ecommerce/core/utils/app_colors.dart';
+import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/presentation/providers/category_providers.dart';
-import 'package:ecommerce/features/category/presentation/screens/product_details_screen.dart';
 import 'package:ecommerce/features/category/presentation/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class SubCategoryProductsScreen extends ConsumerWidget {
   final String subCategoryId;
@@ -18,6 +19,31 @@ class SubCategoryProductsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // 1. Listen for Add To Cart success/error feedback (Check if mounted to avoid errors on pop)
+    ref.listen<AddToCartState>(cartControllerProvider, (previous, next) {
+      if (!context.mounted) return;
+
+      if (next is AddToCartSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Added to cart successfully! (${next.cartResponse.numOfCartItems} items)',
+            ),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      } else if (next is AddToCartError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.message),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    });
+
     final productsAsync = ref.watch(
       productsBySubCategoryProvider(subCategoryId),
     );
@@ -25,6 +51,16 @@ class SubCategoryProductsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: AppColors.primary, size: 22.sp),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home'); // Fallback route if stack is empty
+            }
+          },
+        ),
         title: Text(
           subCategoryName,
           style: TextStyle(
@@ -79,10 +115,15 @@ class SubCategoryProductsScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final product = products[index];
                 return ProductItem(
-                    product: product,
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductDetailsScreen(product: product)));
-                    },
+                  product: product,
+                  onTap: () {
+                    context.push('/product-details', extra: product);
+                  },
+                  onAddToCartTap: () {
+                    ref
+                        .read(cartControllerProvider.notifier)
+                        .addToCart(product.id);
+                  },
                 );
               },
             ),
