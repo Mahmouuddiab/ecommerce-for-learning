@@ -22,4 +22,9 @@ class ApiConstants {
   static const String addToCart = '$baseUrl/cart';
   static const String getUserCart = '$baseUrl/cart';
   static String deleteFromCart(String productId) => '$baseUrl/cart/$productId';
+
+  /// wishlist
+  static const String getUserWishlist = '$baseUrl/wishlist';
+  static const String addToWishlist = '$baseUrl/wishlist';
+  static String deleteFromWishlist(String productId) => '$baseUrl/wishlist/$productId';
 }

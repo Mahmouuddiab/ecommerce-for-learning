@@ -3,8 +3,9 @@ import 'package:ecommerce/features/category/domain/entities/product_entity.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ProductItem extends StatelessWidget {
+class ProductItem extends StatefulWidget {
   final ProductEntity product;
+  final bool isFavorite; // Added flag
   final VoidCallback? onFavoriteTap;
   final VoidCallback? onAddToCartTap;
   final VoidCallback onTap;
@@ -12,17 +13,23 @@ class ProductItem extends StatelessWidget {
   const ProductItem({
     super.key,
     required this.product,
+    this.isFavorite = false, // Default to false
     this.onFavoriteTap,
     this.onAddToCartTap,
-    required this.onTap
+    required this.onTap,
   });
 
   @override
+  State<ProductItem> createState() => _ProductItemState();
+}
+
+class _ProductItemState extends State<ProductItem> {
+  @override
   Widget build(BuildContext context) {
-    final effectivePrice = product.priceAfterDiscount ?? product.price;
+    final effectivePrice = widget.product.priceAfterDiscount ?? widget.product.price;
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -44,7 +51,7 @@ class ProductItem extends StatelessWidget {
                       top: Radius.circular(13.r),
                     ),
                     child: Image.network(
-                      product.imageCover,
+                      widget.product.imageCover,
                       width: double.infinity,
                       height: double.infinity,
                       fit: BoxFit.cover,
@@ -58,7 +65,7 @@ class ProductItem extends StatelessWidget {
                     top: 8.h,
                     right: 8.w,
                     child: InkWell(
-                      onTap: onFavoriteTap,
+                      onTap: widget.onFavoriteTap,
                       borderRadius: BorderRadius.circular(20.r),
                       child: Container(
                         padding: EdgeInsets.all(6.r),
@@ -74,9 +81,9 @@ class ProductItem extends StatelessWidget {
                           ],
                         ),
                         child: Icon(
-                          Icons.favorite_border,
+                          widget.isFavorite ? Icons.favorite : Icons.favorite_border,
                           size: 18.sp,
-                          color: AppColors.primary,
+                          color: widget.isFavorite ? Colors.red : AppColors.primary,
                         ),
                       ),
                     ),
@@ -93,7 +100,7 @@ class ProductItem extends StatelessWidget {
                 children: [
                   // Title
                   Text(
-                    product.title,
+                    widget.product.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -116,10 +123,10 @@ class ProductItem extends StatelessWidget {
                           color: const Color(0xFF004182),
                         ),
                       ),
-                      if (product.priceAfterDiscount != null) ...[
+                      if (widget.product.priceAfterDiscount != null) ...[
                         SizedBox(width: 8.w),
                         Text(
-                          '${product.price} EGP',
+                          '${widget.product.price} EGP',
                           style: TextStyle(
                             fontSize: 10.sp,
                             color: const Color(0xFF004182).withOpacity(0.6),
@@ -139,7 +146,7 @@ class ProductItem extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Review (${product.ratingsAverage})',
+                            'Review (${widget.product.ratingsAverage})',
                             style: TextStyle(
                               fontSize: 11.sp,
                               fontWeight: FontWeight.w500,
@@ -157,7 +164,7 @@ class ProductItem extends StatelessWidget {
 
                       // Add to Cart Button (+)
                       InkWell(
-                        onTap: onAddToCartTap,
+                        onTap: widget.onAddToCartTap,
                         borderRadius: BorderRadius.circular(15.r),
                         child: Container(
                           padding: EdgeInsets.all(4.r),

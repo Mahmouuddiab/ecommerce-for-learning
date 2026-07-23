@@ -2,6 +2,8 @@ import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/presentation/providers/category_providers.dart';
 import 'package:ecommerce/features/category/presentation/widgets/product_item.dart';
+import 'package:ecommerce/features/wishlist/presentation/providers/wishlist_providers.dart';
+import 'package:ecommerce/features/wishlist/presentation/providers/wishlist_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +21,7 @@ class SubCategoryProductsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 1. Listen for Add To Cart success/error feedback (Check if mounted to avoid errors on pop)
+    // 1. Listen for Add To Cart success/error feedback
     ref.listen<AddToCartState>(cartControllerProvider, (previous, next) {
       if (!context.mounted) return;
 
@@ -43,6 +45,42 @@ class SubCategoryProductsScreen extends ConsumerWidget {
         );
       }
     });
+
+    // 2. Listen for Wishlist add/remove success/error feedback
+    ref.listen<WishlistState>(wishlistControllerProvider, (
+        previous,
+        next,
+        ) {
+      if (!context.mounted) return;
+
+      if (next is WishlistSuccess) {
+        final msg = next.message.isNotEmpty
+            ? next.message
+            : 'Wishlist updated successfully!';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(msg),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      } else if (next is WishlistError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.message),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    });
+
+    // 3. Watch Wishlist items to determine favorite status for each product
+    final wishlistAsync = ref.watch(wishlistProductsProvider);
+    final List<String> wishlistIds = wishlistAsync.maybeWhen(
+      data: (items) => items.map((item) => item.id).toList(),
+      orElse: () => [],
+    );
 
     final productsAsync = ref.watch(
       productsBySubCategoryProvider(subCategoryId),
@@ -114,8 +152,12 @@ class SubCategoryProductsScreen extends ConsumerWidget {
               ),
               itemBuilder: (context, index) {
                 final product = products[index];
+                final isFavorite = wishlistIds.contains(product.id);
+
                 return ProductItem(
+                  key: ValueKey(product.id),
                   product: product,
+                  isFavorite: isFavorite,
                   onTap: () {
                     context.push('/product-details', extra: product);
                   },
@@ -123,6 +165,14 @@ class SubCategoryProductsScreen extends ConsumerWidget {
                     ref
                         .read(cartControllerProvider.notifier)
                         .addToCart(product.id);
+                  },
+                  onFavoriteTap: () {
+                    final controller = ref.read(wishlistControllerProvider.notifier);
+                    if (isFavorite) {
+                      controller.removeFromWishlist(product.id);
+                    } else {
+                      controller.addToWishlist(product.id);
+                    }
                   },
                 );
               },
