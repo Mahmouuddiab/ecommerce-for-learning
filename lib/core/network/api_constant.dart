@@ -27,4 +27,7 @@ class ApiConstants {
   static const String getUserWishlist = '$baseUrl/wishlist';
   static const String addToWishlist = '$baseUrl/wishlist';
   static String deleteFromWishlist(String productId) => '$baseUrl/wishlist/$productId';
+
+  /// User / Profile
+  static String getUserProfile(String userId) => '$baseUrl/users/$userId';
 }
