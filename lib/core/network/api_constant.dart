@@ -30,4 +30,9 @@ class ApiConstants {
 
   /// User / Profile
   static String getUserProfile(String userId) => '$baseUrl/users/$userId';
+
+  /// addresses
+  static const String addAddress = '$baseUrl/addresses';
+  static const String getSavedAddress = '$baseUrl/addresses';
+  static String deleteAddress (String id)=> '$baseUrl/addresses/$id';
 }

@@ -33,7 +33,9 @@ class MyApp extends ConsumerWidget {
           title: 'E-Commerce',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple,
+              seedColor: AppColors.primary,
+              primary: AppColors.primary,
+              onPrimary: AppColors.textPrimary,
             ),
             appBarTheme: AppBarThemeData(
               iconTheme: IconThemeData(
