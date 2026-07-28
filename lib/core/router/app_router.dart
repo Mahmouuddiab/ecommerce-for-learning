@@ -1,4 +1,6 @@
 import 'package:ecommerce/core/screens/splash_screen.dart';
+import 'package:ecommerce/features/adresses/presentation/screens/add_address_screen.dart';
+import 'package:ecommerce/features/adresses/presentation/screens/saved_address_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/login_screen.dart';
 import 'package:ecommerce/features/auth/presentation/screens/reset_password_screen.dart';
@@ -91,6 +93,17 @@ final routerProvider = Provider<GoRouter>((ref) {
             subCategoryName: args['subCategoryName'] as String,
           );
         },
+      ),
+
+      GoRoute(
+        path: '/add-address',
+        name: 'add-address',
+        builder: (context, state) => const AddAddressScreen(),
+      ),
+      GoRoute(
+        path: '/saved-address',
+        name: 'saved-address',
+        builder: (context, state) => const SavedAddressScreen(),
       ),
 
     ],
