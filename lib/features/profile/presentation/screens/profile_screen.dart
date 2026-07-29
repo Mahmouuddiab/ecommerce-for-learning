@@ -1,15 +1,13 @@
+import 'package:ecommerce/core/cache/cache_helper.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
+import 'package:ecommerce/features/profile/presentation/providers/profile_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ecommerce/core/cache/cache_helper.dart';
-import 'package:ecommerce/features/profile/presentation/providers/profile_providers.dart';
-import 'package:ecommerce/features/auth/presentation/screens/login_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  /// Handles user logout
   Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
     final theme = Theme.of(context);
     final bool? confirm = await showDialog<bool>(
@@ -52,13 +50,9 @@ class ProfileScreen extends ConsumerWidget {
       // 2. Invalidate profile provider state
       ref.invalidate(userProfileProvider);
 
-      // 3. Navigate to Login Screen and clear route stack
+      // 3. Navigate to Login Screen and reset stack using GoRouter
       if (context.mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-              (route) => false,
-        );
+        context.go('/login');
       }
     }
   }
@@ -74,7 +68,6 @@ class ProfileScreen extends ConsumerWidget {
         child: profileAsync.when(
           data: (profile) => Column(
             children: [
-              // Top Profile Header (Avatar + Name + Settings)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                 child: Row(
@@ -104,7 +97,6 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     const SizedBox(width: 16),
 
-                    // User Name & Main Email Display
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +166,7 @@ class ProfileScreen extends ConsumerWidget {
                       title: 'Wishlist',
                       subtitle: '${profile.wishlist.length} saved items',
                       onTap: () {
-                        // Open Wishlist Screen
+                        context.push('/wishlist');
                       },
                     ),
                     _ProfileListTile(
@@ -188,7 +180,9 @@ class ProfileScreen extends ConsumerWidget {
                     _ProfileListTile(
                       icon: Icons.shield_outlined,
                       title: 'Privacy policy',
-                      onTap: () {},
+                      onTap: () {
+                        context.push('/privacy-policy');
+                      },
                     ),
                     _ProfileListTile(
                       icon: Icons.chat_bubble_outline_rounded,
