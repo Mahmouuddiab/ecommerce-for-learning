@@ -37,9 +37,9 @@ class CartItem extends StatelessWidget {
               width: 120,
               height: double.infinity,
               color: Colors.grey.shade100,
-              child: item.imageCover.isNotEmpty
+              child: item.imageCover != null && item.imageCover!.isNotEmpty
                   ? Image.network(
-                item.imageCover,
+                item.imageCover!,
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) =>
                 const Icon(Icons.broken_image, color: Colors.grey),

@@ -35,4 +35,7 @@ class ApiConstants {
   static const String addAddress = '$baseUrl/addresses';
   static const String getSavedAddress = '$baseUrl/addresses';
   static String deleteAddress (String id)=> '$baseUrl/addresses/$id';
+
+  /// order
+  static String createOrder (String cartId)=> '$baseUrl/orders/$cartId';
 }
