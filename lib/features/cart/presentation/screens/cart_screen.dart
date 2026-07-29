@@ -2,6 +2,7 @@ import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/cart/presentation/widgets/cart_item.dart';
 import 'package:ecommerce/features/cart/presentation/widgets/checkout_bottom_bar.dart';
+import 'package:ecommerce/features/order/presentation/screen/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,10 +11,10 @@ class CartScreen extends ConsumerWidget {
 
   /// Helper method to show confirmation dialog
   Future<void> _showDeleteConfirmationDialog(
-    BuildContext context,
-    WidgetRef ref,
-    String productId,
-  ) async {
+      BuildContext context,
+      WidgetRef ref,
+      String productId,
+      ) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -56,16 +57,19 @@ class CartScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Listen for state changes to show feedback to the user
+    // Listen for controller actions (add/delete feedback)
     ref.listen<AddToCartState>(cartControllerProvider, (previous, next) {
       if (next is AddToCartSuccess) {
+        // Refresh the cart list on success
+        ref.invalidate(cartProductsProvider);
+
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
-            SnackBar(
-              content: Text('product deleted successfully'),
+            const SnackBar(
+              content: Text('Product removed successfully'),
               backgroundColor: Colors.green,
-              duration: const Duration(seconds: 2),
+              duration: Duration(seconds: 2),
             ),
           );
       } else if (next is AddToCartError) {
@@ -101,15 +105,14 @@ class CartScreen extends ConsumerWidget {
         ],
       ),
       body: cartAsync.when(
-        data: (cartItems) {
+        data: (cartResponse) {
+          final cartItems = cartResponse.products;
+          final String cartId = cartResponse.cartId;
+          final double totalAmount = cartResponse.totalCartPrice.toDouble();
+
           if (cartItems.isEmpty) {
             return const _EmptyCartView();
           }
-
-          final double totalAmount = cartItems.fold(
-            0.0,
-            (sum, item) => sum + (item.price * item.quantity),
-          );
 
           return RefreshIndicator(
             onRefresh: () async {
@@ -128,14 +131,23 @@ class CartScreen extends ConsumerWidget {
                       return CartItem(
                         item: item,
                         onDelete: () {
-                          // Show the 2-option confirmation dialog
                           _showDeleteConfirmationDialog(context, ref, item.id);
                         },
                       );
                     },
                   ),
                 ),
-                CheckoutBottomBar(totalAmount: totalAmount),
+                CheckoutBottomBar(
+                  totalAmount: totalAmount,
+                  onCheckout: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CheckoutScreen(cartId: cartId),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           );

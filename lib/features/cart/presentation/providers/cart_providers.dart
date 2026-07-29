@@ -2,7 +2,6 @@ import 'package:ecommerce/features/cart/data/data%20source/cart_remote_ds.dart';
 import '../../data/data source/cart_remote_ds_impl.dart';
 import 'package:ecommerce/features/cart/data/repository/cart_repository_impl.dart';
 import 'package:ecommerce/features/cart/domain/entities/cart_response_entity.dart';
-import 'package:ecommerce/features/cart/domain/entities/product_cart_entity.dart';
 import 'package:ecommerce/features/cart/domain/repository/cart_repository.dart';
 import 'package:ecommerce/features/cart/domain/usecase/add_to_cart_usecase.dart';
 import 'package:ecommerce/features/cart/domain/usecase/delete_from_cart_usecase.dart';
@@ -43,11 +42,9 @@ final deleteFromCartUseCaseProvider = Provider<DeleteFromCartUseCase>((ref) {
 });
 
 // ==========================================
-// 4. Cart Products UI FutureProvider
+// 4. Cart Products UI FutureProvider (UPDATED: Returns CartResponseEntity)
 // ==========================================
-final cartProductsProvider = FutureProvider<List<ProductCartEntity>>((
-    ref,
-    ) async {
+final cartProductsProvider = FutureProvider<CartResponseEntity>((ref) async {
   final useCase = ref.watch(getCartProductUseCaseProvider);
   return await useCase.call();
 });
@@ -111,14 +108,13 @@ final cartControllerProvider =
 NotifierProvider<CartController, AddToCartState>(CartController.new);
 
 // ==========================================
-// 7. Dynamic Cart Count Provider
+// 7. Dynamic Cart Count Provider (UPDATED: Extract count from CartResponseEntity)
 // ==========================================
 final cartCountProvider = Provider<int>((ref) {
   final cartAsync = ref.watch(cartProductsProvider);
 
   return cartAsync.maybeWhen(
-    data: (products) =>
-        products.fold<int>(0, (sum, item) => sum + item.quantity.toInt()),
+    data: (cartResponse) => cartResponse.numOfCartItems,
     orElse: () => 0,
   );
 });

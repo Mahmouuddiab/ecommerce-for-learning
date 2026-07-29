@@ -3,97 +3,58 @@ import 'package:ecommerce/features/cart/domain/entities/product_cart_entity.dart
 class ProductCartModel extends ProductCartEntity {
   const ProductCartModel({
     required super.id,
-    required super.cartItemId,
+    required super.productId,
     required super.title,
-    required super.price,
-    required super.imageCover,
-    required super.quantity,
-    required super.ratingsAverage,
-    super.category,
+    super.imageCover,
     super.brand,
-    super.subcategories,
+    super.category,
+    required super.price,
+    required super.quantity,
   });
 
   factory ProductCartModel.fromJson(Map<String, dynamic> json) {
-    // Inner product object contains title, image, ratings, etc.
-    final productJson = json['product'] as Map<String, dynamic>? ?? {};
+    final productField = json['product'];
+
+    String productId = '';
+    String title = '';
+    String? imageCover;
+    BrandEntity? brand;
+    CategoryEntity? category;
+
+    if (productField is String) {
+      // Add-to-cart response: product is just an ID, no extra details available
+      productId = productField;
+    } else if (productField is Map<String, dynamic>) {
+      productId = productField['_id'] as String? ?? '';
+      title = productField['title'] as String? ?? '';
+      imageCover = productField['imageCover'] as String?;
+
+      final brandJson = productField['brand'] as Map<String, dynamic>?;
+      if (brandJson != null) {
+        brand = BrandEntity(
+          id: brandJson['_id'] as String?,
+          name: brandJson['name'] as String?,
+        );
+      }
+
+      final categoryJson = productField['category'] as Map<String, dynamic>?;
+      if (categoryJson != null) {
+        category = CategoryEntity(
+          id: categoryJson['_id'] as String?,
+          name: categoryJson['name'] as String?,
+        );
+      }
+    }
 
     return ProductCartModel(
-      // Product ID
-      id: productJson['_id'] ?? productJson['id'] ?? '',
-
-      // Cart Item ID (used for delete/update cart API requests)
-      cartItemId: json['_id'] ?? '',
-
-      // Cart Item Price & Quantity
-      price: json['price'] ?? 0,
-      quantity: json['count'] ?? 1, // 'count' represents cart quantity in RouteMisr API
-
-      // Fields inside 'product' object
-      title: productJson['title'] ?? '',
-      imageCover: productJson['imageCover'] ?? '',
-      ratingsAverage: productJson['ratingsAverage'] ?? 0,
-
-      // Nested models
-      category: productJson['category'] != null
-          ? CategoryModel.fromJson(productJson['category'] as Map<String, dynamic>)
-          : null,
-      brand: productJson['brand'] != null
-          ? BrandModel.fromJson(productJson['brand'] as Map<String, dynamic>)
-          : null,
-      subcategories: (productJson['subcategory'] as List<dynamic>?)
-          ?.map((e) => SubcategoryModel.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-          const [],
-    );
-  }
-}
-
-/// Category Model extending CategoryEntity
-class CategoryModel extends CategoryEntity {
-  const CategoryModel({
-    required super.id,
-    required super.name,
-    super.image,
-  });
-
-  factory CategoryModel.fromJson(Map<String, dynamic> json) {
-    return CategoryModel(
-      id: json['_id'] ?? json['id'] ?? '',
-      name: json['name'] ?? '',
-      image: json['image'] as String?,
-    );
-  }
-}
-
-/// Brand Model extending BrandEntity
-class BrandModel extends BrandEntity {
-  const BrandModel({
-    required super.id,
-    required super.name,
-    super.image,
-  });
-
-  factory BrandModel.fromJson(Map<String, dynamic> json) {
-    return BrandModel(
-      id: json['_id'] ?? json['id'] ?? '',
-      name: json['name'] ?? '',
-      image: json['image'] as String?,
-    );
-  }
-}
-
-/// Subcategory Model extending SubcategoryEntity
-class SubcategoryModel extends SubcategoryEntity {
-  const SubcategoryModel({
-    required super.id,
-    required super.name,
-  });
-
-  factory SubcategoryModel.fromJson(Map<String, dynamic> json) {
-    return SubcategoryModel(
-      id: json['_id'] ?? json['id'] ?? '',
-      name: json['name'] ?? '',
+      id: json['_id'] as String? ?? '',
+      productId: productId,
+      title: title,
+      imageCover: imageCover,
+      brand: brand,
+      category: category,
+      price: (json['price'] as num?) ?? 0,
+      quantity: (json['count'] as num?)?.toInt() ?? 0,
     );
   }
 }

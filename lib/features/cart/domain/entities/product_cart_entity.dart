@@ -1,59 +1,35 @@
-class ProductCartEntity {
-  final String id;
-  final String cartItemId;
-  final String title;
-  final num price;
-  final String imageCover;
-  final num quantity; // Corresponds to 'count' in the cart API
-  final num ratingsAverage;
-  final CategoryEntity? category;
-  final BrandEntity? brand;
-  final List<SubcategoryEntity> subcategories;
+class BrandEntity {
+  final String? id;
+  final String? name;
 
-  const ProductCartEntity({
-    required this.id,
-    required this.cartItemId,
-    required this.title,
-    required this.price,
-    required this.imageCover,
-    required this.quantity,
-    required this.ratingsAverage,
-    this.category,
-    this.brand,
-    this.subcategories = const [],
-  });
+  const BrandEntity({this.id, this.name});
 }
 
 class CategoryEntity {
-  final String id;
-  final String name;
-  final String? image;
+  final String? id;
+  final String? name;
 
-  const CategoryEntity({
-    required this.id,
-    required this.name,
-    this.image,
-  });
+  const CategoryEntity({this.id, this.name});
 }
 
-class BrandEntity {
-  final String id;
-  final String name;
-  final String? image;
+class ProductCartEntity {
+  final String id; // cart-item _id
+  final String productId; // underlying product's _id
+  final String title;
+  final String? imageCover;
+  final BrandEntity? brand;
+  final CategoryEntity? category;
+  final num price;
+  final int quantity;
 
-  const BrandEntity({
+  const ProductCartEntity({
     required this.id,
-    required this.name,
-    this.image,
-  });
-}
-
-class SubcategoryEntity {
-  final String id;
-  final String name;
-
-  const SubcategoryEntity({
-    required this.id,
-    required this.name,
+    required this.productId,
+    required this.title,
+    this.imageCover,
+    this.brand,
+    this.category,
+    required this.price,
+    required this.quantity,
   });
 }

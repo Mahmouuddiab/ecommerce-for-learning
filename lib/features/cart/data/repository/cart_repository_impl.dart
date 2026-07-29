@@ -7,7 +7,7 @@ class CartRepositoryImpl implements CartRepository {
   final CartRemoteDs remote;
   CartRepositoryImpl(this.remote);
   @override
-  Future<List<ProductCartEntity>> cartProducts() async {
+  Future<CartResponseEntity> cartProducts() async {
     return await remote.cartProducts();
   }
 

@@ -7,15 +7,15 @@ import 'package:ecommerce/features/cart/data/models/product_cart_model.dart';
 
 class CartRemoteDsImpl implements CartRemoteDs {
   @override
-  Future<List<ProductCartModel>> cartProducts() async {
+  Future<CartResponseModel> cartProducts() async {
     try {
       final response = await DioHelper.get(
         path: ApiConstants.getUserCart,
         withAuth: true,
       );
       if (response.statusCode == 200 && response.data != null) {
-        final List data = response.data['data']?['products'] ?? [];
-        return data.map((e) => ProductCartModel.fromJson(e)).toList();
+        // Pass the root response.data to CartResponseModel.fromJson
+        return CartResponseModel.fromJson(response.data);
       } else {
         throw ServerException(
           'Failed to load cart products. Status code: ${response.statusCode}',
