@@ -38,4 +38,8 @@ class ApiConstants {
 
   /// order
   static String createOrder (String cartId)=> '$baseUrl/orders/$cartId';
+
+  /// reviews
+  static String addReview (String productId)=> '$baseUrl/products/$productId/reviews';
+  static String getProductReviews (String productId)=> '$baseUrl/products/$productId/reviews';
 }
