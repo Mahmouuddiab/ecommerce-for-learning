@@ -1,6 +1,7 @@
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/domain/entities/product_entity.dart';
+import 'package:ecommerce/features/reviews/presentation/riverpod/review_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,23 +10,20 @@ import 'package:go_router/go_router.dart';
 class ProductDetailsScreen extends ConsumerStatefulWidget {
   final ProductEntity product;
 
-  const ProductDetailsScreen({
-    super.key,
-    required this.product,
-  });
+  const ProductDetailsScreen({super.key, required this.product});
 
   @override
-  ConsumerState<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+  ConsumerState<ProductDetailsScreen> createState() =>
+      _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
   int _currentImageIndex = 0;
   int _quantity = 1;
   bool _isExpanded = false;
-  int _selectedSizeIndex = 2; // Default to '40'
-  int _selectedColorIndex = 1; // Default to red
+  int _selectedSizeIndex = 2;
+  int _selectedColorIndex = 1;
 
-  // Mock sizes & colors for clothing/shoes UI
   final List<int> _sizes = [38, 39, 40, 41, 42, 43];
   final List<Color> _colors = [
     const Color(0xFF2C2C2C),
@@ -37,7 +35,6 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Listen for cart operation status (Snackbar notifications)
     ref.listen<AddToCartState>(cartControllerProvider, (previous, next) {
       if (next is AddToCartSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -75,7 +72,11 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: const Color(0xFF004182), size: 22.sp),
+          icon: Icon(
+            Icons.arrow_back,
+            color: const Color(0xFF004182),
+            size: 22.sp,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -89,10 +90,13 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: const Color(0xFF004182), size: 27.sp),
+            icon: Icon(
+              Icons.search,
+              color: const Color(0xFF004182),
+              size: 27.sp,
+            ),
             onPressed: () {},
           ),
-          // Dynamic Cart Badge Count Widget
           Consumer(
             builder: (context, ref, child) {
               final cartCount = ref.watch(cartCountProvider);
@@ -134,11 +138,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 1. Image Carousel & Page Indicators
                   _buildImageCarousel(imageList),
                   SizedBox(height: 16.h),
 
-                  // 2. Title & Price Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,13 +168,13 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   ),
                   SizedBox(height: 12.h),
 
-                  // 3. Stats & Quantity Counter
                   Row(
                     children: [
-                      // Sold Count Pill
                       Container(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 12.w, vertical: 6.h),
+                          horizontal: 12.w,
+                          vertical: 6.h,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.r),
                           border: Border.all(
@@ -189,9 +191,11 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                         ),
                       ),
                       SizedBox(width: 12.w),
-
-                      // Rating Average & Quantity
-                      Icon(Icons.star, size: 16.sp, color: const Color(0xFFFDD835)),
+                      Icon(
+                        Icons.star,
+                        size: 16.sp,
+                        color: const Color(0xFFFDD835),
+                      ),
                       SizedBox(width: 4.w),
                       Text(
                         '${widget.product.ratingsAverage} (${widget.product.ratingsQuantity})',
@@ -203,10 +207,11 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       ),
                       const Spacer(),
 
-                      // Quantity Selector
                       Container(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 8.w, vertical: 4.h),
+                          horizontal: 8.w,
+                          vertical: 4.h,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFF004182),
                           borderRadius: BorderRadius.circular(25.r),
@@ -219,8 +224,11 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                   setState(() => _quantity--);
                                 }
                               },
-                              child: Icon(Icons.remove_circle_outline,
-                                  color: Colors.white, size: 20.sp),
+                              child: Icon(
+                                Icons.remove_circle_outline,
+                                color: Colors.white,
+                                size: 20.sp,
+                              ),
                             ),
                             SizedBox(width: 12.w),
                             Text(
@@ -236,8 +244,11 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               onTap: () {
                                 setState(() => _quantity++);
                               },
-                              child: Icon(Icons.add_circle_outline,
-                                  color: Colors.white, size: 20.sp),
+                              child: Icon(
+                                Icons.add_circle_outline,
+                                color: Colors.white,
+                                size: 20.sp,
+                              ),
                             ),
                           ],
                         ),
@@ -246,7 +257,6 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   ),
                   SizedBox(height: 16.h),
 
-                  // 4. Description Section
                   Text(
                     'Description',
                     style: TextStyle(
@@ -292,7 +302,6 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   ),
                   SizedBox(height: 16.h),
 
-                  // 5. Size Selector
                   Text(
                     'Size',
                     style: TextStyle(
@@ -306,8 +315,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     children: List.generate(_sizes.length, (index) {
                       final isSelected = index == _selectedSizeIndex;
                       return GestureDetector(
-                        onTap: () =>
-                            setState(() => _selectedSizeIndex = index),
+                        onTap: () => setState(() => _selectedSizeIndex = index),
                         child: Container(
                           margin: EdgeInsets.only(right: 12.w),
                           width: 35.r,
@@ -335,7 +343,6 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   ),
                   SizedBox(height: 16.h),
 
-                  // 6. Color Selector
                   Text(
                     'Color',
                     style: TextStyle(
@@ -360,20 +367,26 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                             color: _colors[index],
                           ),
                           child: isSelected
-                              ? Icon(Icons.check,
-                              color: Colors.white, size: 18.sp)
+                              ? Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 18.sp,
+                                )
                               : null,
                         ),
                       );
                     }),
                   ),
+                  SizedBox(height: 24.h),
+
+                  _buildReviewsSection(ref),
+
                   SizedBox(height: 20.h),
                 ],
               ),
             ),
           ),
 
-          // 7. Bottom Navigation Bar with Total Price & Add to Cart CTA
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             child: Row(
@@ -406,11 +419,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     onPressed: isAddingToCart
                         ? null
                         : () {
-                      // Trigger CartController action
-                      ref
-                          .read(cartControllerProvider.notifier)
-                          .addToCart(widget.product.id);
-                    },
+                            ref
+                                .read(cartControllerProvider.notifier)
+                                .addToCart(widget.product.id);
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF004182),
                       padding: EdgeInsets.symmetric(vertical: 14.h),
@@ -420,29 +432,32 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     ),
                     child: isAddingToCart
                         ? SizedBox(
-                      height: 20.sp,
-                      width: 20.sp,
-                      child: const CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
+                            height: 20.sp,
+                            width: 20.sp,
+                            child: const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
                         : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add_shopping_cart,
-                            color: Colors.white, size: 20.sp),
-                        SizedBox(width: 8.w),
-                        Text(
-                          'Add to cart',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_shopping_cart,
+                                color: Colors.white,
+                                size: 20.sp,
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                'Add to cart',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ],
@@ -454,19 +469,15 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
     );
   }
 
-  // Helper Widget for Header Carousel
   Widget _buildImageCarousel(List<String> imageList) {
     return Container(
       height: 240.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.r),
-        border: Border.all(
-          color: const Color(0xFF004182).withOpacity(0.3),
-        ),
+        border: Border.all(color: const Color(0xFF004182).withOpacity(0.3)),
       ),
       child: Stack(
         children: [
-          // Image ViewPager
           PageView.builder(
             itemCount: imageList.length,
             onPageChanged: (index) {
@@ -487,7 +498,6 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
             },
           ),
 
-          // Floating Favorite Heart Icon
           Positioned(
             top: 12.h,
             right: 12.w,
@@ -535,6 +545,206 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   ),
                 );
               }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReviewsSection(WidgetRef ref) {
+    final reviewsAsync = ref.watch(productReviewsProvider(widget.product.id));
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'Reviews',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF004182),
+                  ),
+                ),
+                SizedBox(width: 6.w),
+                reviewsAsync.maybeWhen(
+                  data: (reviews) => Text(
+                    '(${reviews.length})',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF004182).withOpacity(0.5),
+                    ),
+                  ),
+                  orElse: () => const SizedBox.shrink(),
+                ),
+              ],
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.refresh,
+                size: 18.sp,
+                color: const Color(0xFF004182),
+              ),
+              onPressed: () {
+                ref.invalidate(productReviewsProvider(widget.product.id));
+              },
+            ),
+          ],
+        ),
+        SizedBox(height: 8.h),
+
+        reviewsAsync.when(
+          loading: () => Padding(
+            padding: EdgeInsets.symmetric(vertical: 24.h),
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+          error: (error, stack) => Container(
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: Colors.red.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: Colors.red.withOpacity(0.2)),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.error_outline, color: Colors.red, size: 18.sp),
+                SizedBox(width: 8.w),
+                Expanded(
+                  child: Text(
+                    'Failed to load reviews. Pull to refresh or tap retry.',
+                    style: TextStyle(color: Colors.red, fontSize: 12.sp),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          data: (reviews) {
+            if (reviews.isEmpty) {
+              return Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 24.h),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF004182).withOpacity(0.04),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.rate_review_outlined,
+                      color: const Color(0xFF004182).withOpacity(0.3),
+                      size: 28.sp,
+                    ),
+                    SizedBox(height: 6.h),
+                    Text(
+                      'No reviews yet for this product.',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: const Color(0xFF004182).withOpacity(0.6),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return SizedBox(
+              height: 140.h,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: reviews.length,
+                separatorBuilder: (context, index) => SizedBox(width: 12.w),
+                itemBuilder: (context, index) {
+                  final review = reviews[index];
+                  return _buildReviewCard(review);
+                },
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildReviewCard(dynamic review) {
+    final initial = review.userName.isNotEmpty
+        ? review.userName[0].toUpperCase()
+        : '?';
+
+    return Container(
+      width: 240.w,
+      padding: EdgeInsets.all(14.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14.r),
+        border: Border.all(color: const Color(0xFF004182).withOpacity(0.08)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF004182).withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 16.r,
+                backgroundColor: const Color(0xFF004182).withOpacity(0.1),
+                child: Text(
+                  initial,
+                  style: TextStyle(
+                    color: const Color(0xFF004182),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.sp,
+                  ),
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: Text(
+                  review.userName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF004182),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+          Row(
+            children: List.generate(5, (i) {
+              final filled = i < review.rating.round();
+              return Icon(
+                filled ? Icons.star : Icons.star_border,
+                size: 14.sp,
+                color: const Color(0xFFFDD835),
+              );
+            }),
+          ),
+          SizedBox(height: 6.h),
+          Expanded(
+            child: Text(
+              review.review,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: const Color(0xFF004182).withOpacity(0.75),
+                height: 1.35,
+              ),
             ),
           ),
         ],

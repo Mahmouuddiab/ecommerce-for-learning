@@ -14,7 +14,7 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF004182); // RouteMisr / App Primary Blue
+    const primaryColor = Color(0xFF004182);
 
     return Container(
       height: 120,
