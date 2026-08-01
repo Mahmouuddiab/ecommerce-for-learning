@@ -1,0 +1,89 @@
+{
+  "sign_up": {
+    "full_name": "Full Name",
+    "mobile_number": "Mobile Number",
+    "email_address": "E-mail Address",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "full_name_hint": "enter your full name",
+    "mobile_number_hint": "enter your mobile no",
+    "email_hint": "enter your email address",
+    "password_hint": "enter your password",
+    "confirm_password_hint": "enter your password confirmation",
+    "sign_up_button": "Sign Up",
+    "already_have_account": "Already have an account? ",
+    "login": "Login"
+  },
+  "login": {
+    "welcome_back": "Welcome Back To Route",
+    "please_sign_in": "Please sign in with your mail",
+    "email": "Email",
+    "password": "Password",
+    "email_hint": "enter your email",
+    "password_hint": "enter your password",
+    "forgot_password": "Forgot password",
+    "login_button": "Login",
+    "dont_have_account": "Don't have an account? ",
+    "create_account": "Create Account"
+  },
+  "forgot_password": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email address to receive a reset code.",
+    "email": "Email",
+    "email_hint": "Enter your email",
+    "send_reset_code": "Send Reset Code"
+  },
+  "reset_password": {
+    "reset_password_label": "Reset Password",
+    "subtitle_prefix": "Create a strong new password for your account associated with\n",
+    "new_password_hint": "New Password",
+    "password_empty_validation": "Password cannot be empty",
+    "password_length_validation": "Password must be at least 6 characters",
+    "reset_button": "Reset Password",
+    "reset_success_message": "Password reset successfully! Please login with your new password."
+  },
+  "verify_code": {
+    "title": "Verify Code",
+    "subtitle_prefix": "Enter the 6-digit code sent to\n",
+    "incomplete_code_validation": "Enter the complete 6-digit code",
+    "code_verified_success": "Code verified successfully!",
+    "resend_code": "Resend Code",
+    "verify_button": "Verify"
+  },
+  "settings": {
+    "title": "Settings",
+    "my_profile": "My profile",
+    "language": "Language",
+    "english": "English",
+    "arabic": "Arabic",
+    "notifications": "Notifications"
+  },
+  "address": {
+    "add_new_address": "Add New Address",
+    "address_details": "Address Details",
+    "fill_information_subtitle": "Please fill in the information below to add a new delivery location.",
+    "saved_addresses": "Saved Addresses",
+    "address_label": "Address Label",
+    "label_hint": "e.g., Home, Office, Gym",
+    "city": "City",
+    "city_hint": "e.g., Giza, Cairo",
+    "phone_number": "Phone Number",
+    "phone_hint": "e.g., 01270883103",
+    "detailed_address": "Detailed Address",
+    "details_hint": "Street name, building number, apartment, floor...",
+    "label_validation": "Please enter an address label",
+    "city_validation": "Please enter your city",
+    "phone_validation": "Please enter phone number",
+    "details_validation": "Please enter detailed address information",
+    "save_address": "Save Address",
+    "address_added_success": "Address added successfully",
+    "delete_address": "Delete Address",
+    "delete_confirm_message": "Are you sure you want to delete \"{}\"?",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "failed_to_delete": "Failed to delete address",
+    "address_deleted_success": "Address deleted successfully!",
+    "no_addresses_found": "No saved addresses found",
+    "try_again": "Try Again"
+  }
+}

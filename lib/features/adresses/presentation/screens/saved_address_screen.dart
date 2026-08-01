@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/features/adresses/domain/entity/saved_address_entity.dart';
 import 'package:ecommerce/features/adresses/presentation/providers/address_providers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class SavedAddressScreen extends ConsumerWidget {
@@ -11,17 +13,21 @@ class SavedAddressScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<SavedAddressEntity?>>(
       deleteAddressControllerProvider,
-      (previous, next) {
+          (previous, next) {
         if (next.hasError && !next.isLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Failed to delete address: ${next.error}'),
+              content: Text(
+                '${TranslationKeys.address.failedToDelete.tr()}: ${next.error}',
+              ),
               backgroundColor: Colors.red,
             ),
           );
         } else if (next.hasValue && next.value != null && !next.isLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Address deleted successfully!')),
+            SnackBar(
+              content: Text(TranslationKeys.address.addressDeletedSuccess.tr()),
+            ),
           );
         }
       },
@@ -31,7 +37,7 @@ class SavedAddressScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Saved Addresses'),
+        title: Text(TranslationKeys.address.savedAddresses.tr()),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -68,7 +74,7 @@ class SavedAddressScreen extends ConsumerWidget {
           context.push('/add-address');
         },
         icon: const Icon(Icons.add),
-        label: const Text('Add New Address'),
+        label: Text(TranslationKeys.address.addNewAddress.tr()),
       ),
     );
   }
@@ -155,12 +161,14 @@ class _AddressCard extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Delete Address'),
-        content: Text('Are you sure you want to delete "${address.name}"?'),
+        title: Text(TranslationKeys.address.deleteAddress.tr()),
+        content: Text(
+          TranslationKeys.address.deleteConfirmMessage.tr(args: [address.name]),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
+            child: Text(TranslationKeys.address.cancel.tr()),
           ),
           TextButton(
             onPressed: () {
@@ -169,7 +177,10 @@ class _AddressCard extends ConsumerWidget {
                   .read(deleteAddressControllerProvider.notifier)
                   .deleteAddress(address.id);
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            child: Text(
+              TranslationKeys.address.delete.tr(),
+              style: const TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
@@ -185,12 +196,12 @@ class _EmptyAddressView extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(Icons.location_off_outlined, size: 64, color: Colors.grey),
-          SizedBox(height: 16),
+        children: [
+          const Icon(Icons.location_off_outlined, size: 64, color: Colors.grey),
+          const SizedBox(height: 16),
           Text(
-            'No saved addresses found',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+            TranslationKeys.address.noAddressesFound.tr(),
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ],
       ),
@@ -223,7 +234,7 @@ class _ErrorView extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
+              label: Text(TranslationKeys.address.tryAgain.tr()),
             ),
           ],
         ),

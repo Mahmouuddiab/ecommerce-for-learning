@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/params/login_params.dart';
 import 'package:ecommerce/core/screens/main_navigation_screen.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
@@ -6,7 +8,6 @@ import 'package:ecommerce/features/auth/domain/entities/user_entity.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/auth_text_field.dart';
 import 'package:ecommerce/features/auth/presentation/widegts/option_row.dart';
-import 'package:ecommerce/features/home/presentation/screens/home_screen.dart';
 import 'package:ecommerce/shared/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -99,7 +100,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                   // Welcome Headers
                   Text(
-                    "Welcome Back To Route",
+                    TranslationKeys.login.welcomeBack.tr(),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24.sp,
@@ -108,7 +109,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    "Please sign in with your mail",
+                    TranslationKeys.login.pleaseSignIn.tr(),
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
                       fontSize: 14.sp,
@@ -118,8 +119,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                   // Email/User Name Field
                   AuthTextField(
-                    label: "Email",
-                    hint: "enter your email",
+                    label: TranslationKeys.login.email.tr(),
+                    hint: TranslationKeys.login.emailHint.tr(),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (v) => AppValidator.email(v ?? ''),
@@ -128,8 +129,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                   // Password Field
                   AuthTextField(
-                    label: "Password",
-                    hint: "enter your password",
+                    label: TranslationKeys.login.password.tr(),
+                    hint: TranslationKeys.login.passwordHint.tr(),
                     controller: _passwordController,
                     keyboardType: TextInputType.text,
                     validator: (v) => AppValidator.password(v ?? ''),
@@ -145,7 +146,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         context.goNamed('forgot-password');
                       },
                       child: Text(
-                        "Forgot password",
+                        TranslationKeys.login.forgotPassword.tr(),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.sp,
@@ -158,7 +159,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                   // Login Action Button
                   PrimaryButton(
-                    label: "Login",
+                    label: TranslationKeys.login.loginButton.tr(),
                     isLoading: isLoading,
                     onPressed: isLoading ? null : _submit,
                   ),
@@ -167,8 +168,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   // Switch Auth Flow Link centered
                   Center(
                     child: OptionRow(
-                      questionText: "Don't have an account? ",
-                      actionText: "Create Account",
+                      questionText: TranslationKeys.login.dontHaveAccount.tr(),
+                      actionText: TranslationKeys.login.createAccount.tr(),
                       onTap: () {
                         context.goNamed('sign-up');
                       },

@@ -133,7 +133,7 @@ class ProfileScreen extends ConsumerWidget {
                         size: 26,
                       ),
                       onPressed: () {
-                        // Navigate to Settings Screen
+                        context.push('/setting');
                       },
                     ),
                   ],
