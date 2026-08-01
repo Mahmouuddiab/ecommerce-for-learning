@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
 import 'package:ecommerce/features/auth/domain/entities/forgot_password.dart';
@@ -98,7 +100,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 SizedBox(height: 60.h),
 
                 Text(
-                  "Forgot Password",
+                  TranslationKeys.forgotPassword.title.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24.sp,
@@ -109,15 +111,15 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 SizedBox(height: 8.h),
 
                 Text(
-                  "Enter your email address to receive a reset code.",
+                  TranslationKeys.forgotPassword.subtitle.tr(),
                   style: TextStyle(color: Colors.white70, fontSize: 14.sp),
                 ),
 
                 SizedBox(height: 70.h),
 
                 AuthTextField(
-                  label: "Email",
-                  hint: "Enter your email",
+                  label: TranslationKeys.forgotPassword.email.tr(),
+                  hint: TranslationKeys.forgotPassword.emailHint.tr(),
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) => AppValidator.email(v ?? ''),
@@ -126,7 +128,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 SizedBox(height: 40.h),
 
                 PrimaryButton(
-                  label: "Send Reset Code",
+                  label: TranslationKeys.forgotPassword.sendResetCode.tr(),
                   isLoading: isLoading,
                   onPressed: isLoading ? null : _submit,
                 ),

@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/auth/domain/entities/verify_code_entity.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
@@ -40,27 +42,23 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
     final authState = ref.watch(authControllerProvider);
     final isLoading = authState is AsyncLoading;
 
-    // Listen to state changes to handle success and error side-effects
     ref.listen<AsyncValue<Object?>>(authControllerProvider, (previous, next) {
       next.whenOrNull(
         data: (data) {
           if (data is VerifyCodeEntity) {
-            // Reset the state to prevent duplicate triggers upon returning
             ref.read(authControllerProvider.notifier).reset();
-
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Code verified successfully!"),
+              SnackBar(
+                content: Text(
+                  TranslationKeys.verifyCode.codeVerifiedSuccess.tr(),
+                ),
                 backgroundColor: Colors.green,
               ),
             );
 
             Future.delayed(const Duration(milliseconds: 500), () {
               if (context.mounted) {
-                context.goNamed(
-                  'reset-password',
-                  extra: widget.email,
-                );
+                context.goNamed('reset-password', extra: widget.email);
               }
             });
           }
@@ -100,7 +98,7 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
                 SizedBox(height: 60.h),
 
                 Text(
-                  "Verify Code",
+                  TranslationKeys.verifyCode.title.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24.sp,
@@ -110,9 +108,24 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
 
                 SizedBox(height: 8.h),
 
-                Text(
-                  "Enter the 6-digit code sent to\n${widget.email}",
-                  style: TextStyle(color: Colors.white70, fontSize: 14.sp),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: TranslationKeys.verifyCode.subtitlePrefix.tr(),
+                        style: TextStyle(color: Colors.white70, fontSize: 14.sp),
+                      ),
+                      TextSpan(
+                        text: widget.email,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
 
                 SizedBox(height: 50.h),
@@ -130,7 +143,8 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
                   errorTextSpace: 25.h,
                   validator: (value) {
                     if (value == null || value.length < 6) {
-                      return "Enter the complete 6-digit code";
+                      return TranslationKeys.verifyCode.incompleteCodeValidation
+                          .tr();
                     }
                     return null;
                   },
@@ -139,20 +153,13 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
                     borderRadius: BorderRadius.circular(12.r),
                     fieldHeight: 55.h,
                     fieldWidth: 48.w,
-
-                    // Outer border styling
                     activeColor: Colors.white,
                     inactiveColor: Colors.white54,
                     selectedColor: Colors.white,
-
-                    // Background fill styling
                     activeFillColor: Colors.white,
                     inactiveFillColor: Colors.white.withOpacity(0.9),
                     selectedFillColor: Colors.white,
-
-                    // Error boundary styling
                     errorBorderColor: Colors.redAccent,
-
                     borderWidth: 1.5,
                   ),
                   textStyle: TextStyle(
@@ -163,7 +170,7 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
                   onChanged: (_) {},
                   onCompleted: (value) {
                     if (!isLoading) {
-                      _verify(); // Trigger validation automatically when the last digit is filled
+                      _verify();
                     }
                   },
                 ),
@@ -175,13 +182,12 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
                     onPressed: isLoading
                         ? null
                         : () {
-                            // Resend verification code by invoking forgotPassword with user's email
                             ref
                                 .read(authControllerProvider.notifier)
                                 .forgotPassword(widget.email);
                           },
                     child: Text(
-                      "Resend Code",
+                      TranslationKeys.verifyCode.resendCode.tr(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 15.sp,
@@ -194,7 +200,7 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
                 SizedBox(height: 40.h),
 
                 PrimaryButton(
-                  label: "Verify",
+                  label: TranslationKeys.verifyCode.verifyButton.tr(),
                   isLoading: isLoading,
                   onPressed: isLoading ? null : _verify,
                 ),

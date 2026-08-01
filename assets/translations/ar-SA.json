@@ -1,0 +1,89 @@
+{
+  "sign_up": {
+    "full_name": "الاسم الكامل",
+    "mobile_number": "رقم الجوال",
+    "email_address": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirm_password": "تأكيد كلمة المرور",
+    "full_name_hint": "أدخل اسمك الكامل",
+    "mobile_number_hint": "أدخل رقم الجوال",
+    "email_hint": "أدخل البريد الإلكتروني",
+    "password_hint": "أدخل كلمة المرور",
+    "confirm_password_hint": "أدخل تأكيد كلمة المرور",
+    "sign_up_button": "إنشاء حساب",
+    "already_have_account": "لديك حساب بالفعل؟ ",
+    "login": "تسجيل الدخول"
+  },
+  "login": {
+    "welcome_back": "مرحبًا بك مجددًا في روت",
+    "please_sign_in": "يرجى تسجيل الدخول باستخدام بريدك الإلكتروني",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "email_hint": "أدخل البريد الإلكتروني",
+    "password_hint": "أدخل كلمة المرور",
+    "forgot_password": "نسيت كلمة المرور",
+    "login_button": "تسجيل الدخول",
+    "dont_have_account": "ليس لديك حساب؟ ",
+    "create_account": "إنشاء حساب"
+  },
+  "forgot_password": {
+    "title": "نسيت كلمة المرور",
+    "subtitle": "أدخل عنوان بريدك الإلكتروني لتلقي رمز إعادة التعيين.",
+    "email": "البريد الإلكتروني",
+    "email_hint": "أدخل بريدك الإلكتروني",
+    "send_reset_code": "إرسال رمز إعادة التعيين"
+  },
+  "reset_password": {
+    "reset_password_label": "إعادة تعيين كلمة المرور",
+    "subtitle_prefix": "أنشئ كلمة مرور جديدة وقوية لحسابك المرتبط بـ\n",
+    "new_password_hint": "كلمة المرور الجديدة",
+    "password_empty_validation": "لا يمكن أن تكون كلمة المرور فارغة",
+    "password_length_validation": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+    "reset_button": "إعادة تعيين كلمة المرور",
+    "reset_success_message": "تمت إعادة تعيين كلمة المرور بنجاح! يرجى تسجيل الدخول باستخدام كلمة المرور الجديدة."
+  },
+  "verify_code": {
+    "title": "التحقق من الرمز",
+    "subtitle_prefix": "أدخل الرمز المكون من 6 أرقام المرسل إلى\n",
+    "incomplete_code_validation": "أدخل الرمز المكون من 6 أرقام كاملاً",
+    "code_verified_success": "تم التحقق من الرمز بنجاح!",
+    "resend_code": "إعادة إرسال الرمز",
+    "verify_button": "تأكيد"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "my_profile": "ملفي الشخصي",
+    "language": "اللغة",
+    "english": "الإنجليزي",
+    "arabic": "العربي",
+    "notifications": "الإشعارات"
+  },
+  "address": {
+    "add_new_address": "إضافة عنوان جديد",
+    "address_details": "تفاصيل العنوان",
+    "fill_information_subtitle": "يرجى ملء المعلومات أدناه لإضافة موقع توصيل جديد.",
+    "saved_addresses": "العناوين المحفوظة",
+    "address_label": "تسمية العنوان",
+    "label_hint": "مثال: المنزل، المكتب، النادي",
+    "city": "المدينة",
+    "city_hint": "مثال: الجيزة، القاهرة",
+    "phone_number": "رقم الهاتف",
+    "phone_hint": "مثال: 01270883103",
+    "detailed_address": "العنوان بالتفصيل",
+    "details_hint": "اسم الشارع، رقم المبنى، الشقة، الطابق...",
+    "label_validation": "يرجى إدخال تسمية العنوان",
+    "city_validation": "يرجى إدخال مدينتك",
+    "phone_validation": "يرجى إدخال رقم الهاتف",
+    "details_validation": "يرجى إدخال تفاصيل العنوان",
+    "save_address": "حفظ العنوان",
+    "address_added_success": "تمت إضافة العنوان بنجاح",
+    "delete_address": "حذف العنوان",
+    "delete_confirm_message": "هل أنت ألكيد من رغبتك في حذف \"{}\"؟",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "failed_to_delete": "فشل حذف العنوان",
+    "address_deleted_success": "تم حذف العنوان بنجاح!",
+    "no_addresses_found": "لا توجد عناوين محفوظة",
+    "try_again": "المحاولة مرة أخرى"
+  }
+}

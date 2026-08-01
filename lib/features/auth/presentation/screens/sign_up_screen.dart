@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/params/register_params.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
@@ -101,32 +103,32 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   SvgPicture.asset("assets/logo.svg"),
                   SizedBox(height: 40.h),
                   AuthTextField(
-                    label: "Full Name",
-                    hint: "enter your full name ",
+                    label: TranslationKeys.signUp.fullName.tr(),
+                    hint: TranslationKeys.signUp.fullNameHint.tr(),
                     controller: _nameController,
                     keyboardType: TextInputType.text,
                     validator: (v) => AppValidator.name(v ?? ''),
                   ),
                   SizedBox(height: 16.h),
                   AuthTextField(
-                    label: "Mobile Number",
-                    hint: "enter your mobile no",
+                    label: TranslationKeys.signUp.mobileNumber.tr(),
+                    hint: TranslationKeys.signUp.mobileNumberHint.tr(),
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
                     validator: (v) => AppValidator.egyptPhone(v ?? ''),
                   ),
                   SizedBox(height: 16.h),
                   AuthTextField(
-                    label: "E-mail Address",
-                    hint: "enter your email address",
+                    label: TranslationKeys.signUp.emailAddress.tr(),
+                    hint: TranslationKeys.signUp.emailHint.tr(),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (v) => AppValidator.email(v ?? ''),
                   ),
                   SizedBox(height: 16.h),
                   AuthTextField(
-                    label: "Password",
-                    hint: "enter your password",
+                    label: TranslationKeys.signUp.password.tr(),
+                    hint: TranslationKeys.signUp.passwordHint.tr(),
                     controller: _passwordController,
                     keyboardType: TextInputType.text,
                     validator: (v) => AppValidator.password(v ?? ''),
@@ -134,8 +136,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ),
                   SizedBox(height: 16.h),
                   AuthTextField(
-                    label: "Confirm Password",
-                    hint: "enter your password confirmation",
+                    label: TranslationKeys.signUp.confirmPassword.tr(),
+                    hint: TranslationKeys.signUp.confirmPasswordHint.tr(),
                     controller: _confirmPasswordController,
                     keyboardType: TextInputType.text,
                     validator: (v) => AppValidator.confirmPassword(
@@ -146,14 +148,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ),
                   SizedBox(height: 32.h),
                   PrimaryButton(
-                    label: "Sign Up",
+                    label: TranslationKeys.signUp.signUpButton.tr(),
                     isLoading: isLoading,
                     onPressed: isLoading ? null : _submit,
                   ),
                   SizedBox(height: 20.h),
                   OptionRow(
-                    questionText: "Already have an account? ",
-                    actionText: "Login",
+                    questionText: TranslationKeys.signUp.alreadyHaveAccount.tr(),
+                    actionText: TranslationKeys.signUp.login.tr(),
                     onTap: () {
                       context.goNamed('login');
                     },

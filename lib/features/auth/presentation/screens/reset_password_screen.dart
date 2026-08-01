@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/auth/domain/entities/reset_password_entity.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
@@ -11,13 +13,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 class ResetPasswordScreen extends ConsumerStatefulWidget {
   final String email;
 
-  const ResetPasswordScreen({
-    super.key,
-    required this.email,
-  });
+  const ResetPasswordScreen({super.key, required this.email});
 
   @override
-  ConsumerState<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+  ConsumerState<ResetPasswordScreen> createState() =>
+      _ResetPasswordScreenState();
 }
 
 class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
@@ -34,7 +34,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final password = _passwordController.text.trim();
-    ref.read(authControllerProvider.notifier).resetPassword(widget.email, password);
+    ref
+        .read(authControllerProvider.notifier)
+        .resetPassword(widget.email, password);
   }
 
   @override
@@ -51,8 +53,10 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
             ref.read(authControllerProvider.notifier).reset();
 
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Password reset successfully! Please login with your new password."),
+              SnackBar(
+                content: Text(
+                  TranslationKeys.resetPassword.resetSuccessMessage.tr(),
+                ),
                 backgroundColor: Colors.green,
                 duration: Duration(seconds: 3),
               ),
@@ -91,16 +95,13 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 SizedBox(height: 20.h),
 
                 Center(
-                  child: SvgPicture.asset(
-                    "assets/logo.svg",
-                    width: 200.w,
-                  ),
+                  child: SvgPicture.asset("assets/logo.svg", width: 200.w),
                 ),
 
                 SizedBox(height: 70.h),
 
                 Text(
-                  "Reset Password",
+                  TranslationKeys.resetPassword.resetPasswordLabel.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24.sp,
@@ -111,26 +112,30 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 SizedBox(height: 8.h),
 
                 Text(
-                  "Create a strong new password for your account associated with\n${widget.email}",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14.sp,
-                  ),
+                  "${TranslationKeys.resetPassword.subtitlePrefix}${widget.email}"
+                      .tr(),
+                  style: TextStyle(color: Colors.white70, fontSize: 14.sp),
                 ),
 
                 SizedBox(height: 80.h),
 
                 CustomTextField(
                   controller: _passwordController,
-                  hint: "New Password",
+                  hint: TranslationKeys.resetPassword.newPasswordHint.tr(),
                   isPassword: true,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return "Password cannot be empty";
+                      return TranslationKeys
+                          .resetPassword
+                          .passwordEmptyValidation
+                          .tr();
                     }
 
                     if (value.trim().length < 6) {
-                      return "Password must be at least 6 characters";
+                      return TranslationKeys
+                          .resetPassword
+                          .passwordLengthValidation
+                          .tr();
                     }
 
                     return null;
@@ -140,7 +145,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 SizedBox(height: 50.h),
 
                 PrimaryButton(
-                  label: "Reset Password",
+                  label: TranslationKeys.resetPassword.resetButton.tr(),
                   isLoading: isLoading,
                   onPressed: isLoading ? null : _submit,
                 ),

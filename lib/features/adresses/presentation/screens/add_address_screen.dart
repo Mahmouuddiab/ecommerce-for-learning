@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/params/address_params.dart';
 import 'package:ecommerce/features/adresses/domain/entity/address_entity.dart';
 import 'package:ecommerce/features/adresses/presentation/providers/address_providers.dart';
@@ -55,7 +57,7 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
             if (address != null) {
               CustomSnackBar.show(
                   context: context,
-                  message: 'Address added successfully',
+                  message: TranslationKeys.address.addressAddedSuccess.tr(),
                   type: SnackBarType.success
               );
               Navigator.pop(context);
@@ -77,8 +79,8 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Add New Address',
+        title: Text(
+          TranslationKeys.address.addNewAddress.tr(),
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -93,14 +95,14 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Address Details',
+                  TranslationKeys.address.addressDetails.tr(),
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Please fill in the information below to add a new delivery location.',
+                  TranslationKeys.address.fillInformationSubtitle.tr(),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.hintColor,
                   ),
@@ -109,13 +111,13 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
 
                 _buildTextField(
                   controller: _nameController,
-                  label: 'Address Label',
-                  hint: 'e.g., Home, Office, Gym',
+                  label: TranslationKeys.address.addressLabel.tr(),
+                  hint: TranslationKeys.address.labelHint.tr(),
                   prefixIcon: Icons.bookmark_border_rounded,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter an address label';
+                      return TranslationKeys.address.labelValidation.tr();
                     }
                     return null;
                   },
@@ -124,13 +126,13 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
 
                 _buildTextField(
                   controller: _cityController,
-                  label: 'City',
-                  hint: 'e.g., Giza, Cairo',
+                  label: TranslationKeys.address.city.tr(),
+                  hint: TranslationKeys.address.cityHint.tr(),
                   prefixIcon: Icons.location_city_rounded,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter your city';
+                      return TranslationKeys.address.cityValidation.tr();
                     }
                     return null;
                   },
@@ -139,14 +141,14 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
 
                 _buildTextField(
                   controller: _phoneController,
-                  label: 'Phone Number',
-                  hint: 'e.g., 01270883103',
+                  label: TranslationKeys.address.phoneNumber.tr(),
+                  hint: TranslationKeys.address.phoneHint.tr(),
                   prefixIcon: Icons.phone_outlined,
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter phone number';
+                      return TranslationKeys.address.phoneValidation.tr();
                     }
                     return null;
                   },
@@ -155,14 +157,14 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
 
                 _buildTextField(
                   controller: _detailsController,
-                  label: 'Detailed Address',
-                  hint: 'Street name, building number, apartment, floor...',
+                  label: TranslationKeys.address.detailedAddress.tr(),
+                  hint: TranslationKeys.address.detailsHint.tr(),
                   prefixIcon: Icons.home_outlined,
                   maxLines: 3,
                   textInputAction: TextInputAction.done,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter detailed address information';
+                      return TranslationKeys.address.detailsValidation.tr();
                     }
                     return null;
                   },
@@ -197,8 +199,8 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
                 ),
               ),
             )
-                : const Text(
-              'Save Address',
+                : Text(
+              TranslationKeys.address.saveAddress.tr(),
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
