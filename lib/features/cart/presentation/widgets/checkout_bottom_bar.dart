@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutBottomBar extends StatelessWidget {
@@ -31,9 +33,9 @@ class CheckoutBottomBar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Total price',
-                  style: TextStyle(
+                Text(
+                  TranslationKeys.cart.totalPrice.tr(),
+                  style: const TextStyle(
                     color: Color(0xFF6E7489),
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
@@ -41,7 +43,7 @@ class CheckoutBottomBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'EGP $formattedPrice',
+                  TranslationKeys.cart.currencyEgp.tr(args: [formattedPrice]),
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -63,18 +65,18 @@ class CheckoutBottomBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Check Out',
-                    style: TextStyle(
+                    TranslationKeys.cart.checkOut.tr(),
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(width: 24),
-                  Icon(
+                  const SizedBox(width: 24),
+                  const Icon(
                     Icons.arrow_forward_sharp,
                     size: 20,
                   ),
