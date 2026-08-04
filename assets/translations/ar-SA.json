@@ -85,5 +85,20 @@
     "address_deleted_success": "تم حذف العنوان بنجاح!",
     "no_addresses_found": "لا توجد عناوين محفوظة",
     "try_again": "المحاولة مرة أخرى"
+  },
+  "cart": {
+    "delete_item": "حذف العنصر",
+    "delete_confirm_message": "هل أنت ألك متأكد من أنك تريد إزالة هذا العنصر من عربة التسوق؟",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "product_removed_success": "تمت إزالة المنتج بنجاح",
+    "title": "عربة التسوق",
+    "failed_to_load": "فشل في تحميل عناصر العربة",
+    "try_again": "إعادة المحاولة",
+    "empty_cart_title": "عربة التسوق فارغة",
+    "empty_cart_subtitle": "استكشف المنتجات وأضفها إلى عربة التسوق!",
+    "total_price": "السعر الإجمالي",
+    "currency_egp": "ج.م {}",
+    "check_out": "إتمام الشراء"
   }
 }

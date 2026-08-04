@@ -7,6 +7,7 @@ class TranslationKeys {
   static const VerifyCode verifyCode = VerifyCode();
   static const Settings settings = Settings();
   static const Address address = Address();
+  static const Cart cart = Cart();
 }
 
 class SignUp {
@@ -108,4 +109,21 @@ class Address {
   final String addressDeletedSuccess = "address.address_deleted_success";
   final String noAddressesFound = "address.no_addresses_found";
   final String tryAgain = "address.try_again";
+}
+
+class Cart {
+  const Cart();
+  final String deleteItem = "cart.delete_item";
+  final String deleteConfirmMessage = "cart.delete_confirm_message";
+  final String cancel = "cart.cancel";
+  final String delete = "cart.delete";
+  final String productRemovedSuccess = "cart.product_removed_success";
+  final String title = "cart.title";
+  final String failedToLoad = "cart.failed_to_load";
+  final String tryAgain = "cart.try_again";
+  final String emptyCartTitle = "cart.empty_cart_title";
+  final String emptyCartSubtitle = "cart.empty_cart_subtitle";
+  final String totalPrice = "cart.total_price";
+  final String currencyEgp = "cart.currency_egp";
+  final String checkOut = "cart.check_out";
 }

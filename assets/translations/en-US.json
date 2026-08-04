@@ -85,5 +85,20 @@
     "address_deleted_success": "Address deleted successfully!",
     "no_addresses_found": "No saved addresses found",
     "try_again": "Try Again"
+  },
+  "cart": {
+    "delete_item": "Delete Item",
+    "delete_confirm_message": "Are you sure you want to remove this item from your cart?",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "product_removed_success": "Product removed successfully",
+    "title": "Cart",
+    "failed_to_load": "Failed to load cart items",
+    "try_again": "Try Again",
+    "empty_cart_title": "Your cart is empty",
+    "empty_cart_subtitle": "Explore items and add them to your cart!",
+    "total_price": "Total price",
+    "currency_egp": "EGP {}",
+    "check_out": "Check Out"
   }
 }
