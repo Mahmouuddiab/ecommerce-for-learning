@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/cache/cache_helper.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/profile/presentation/providers/profile_providers.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +18,13 @@ class ProfileScreen extends ConsumerWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to log out?'),
+        title: Text(TranslationKeys.profile.logoutTitle.tr()),
+        content: Text(TranslationKeys.profile.logoutConfirmMessage.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: Text(
-              'Cancel',
+              TranslationKeys.profile.cancel.tr(),
               style: TextStyle(color: theme.hintColor),
             ),
           ),
@@ -36,7 +38,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Logout'),
+            child: Text(TranslationKeys.profile.logout.tr()),
           ),
         ],
       ),
@@ -86,7 +88,9 @@ class ProfileScreen extends ConsumerWidget {
                         radius: 28,
                         backgroundColor: theme.colorScheme.primaryContainer,
                         child: Text(
-                          profile.name.isNotEmpty ? profile.name[0].toUpperCase() : 'U',
+                          profile.name.isNotEmpty
+                              ? profile.name[0].toUpperCase()
+                              : TranslationKeys.profile.defaultAvatarLetter.tr(),
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -150,58 +154,58 @@ class ProfileScreen extends ConsumerWidget {
                     if (profile.phone.isNotEmpty)
                       _ProfileListTile(
                         icon: Icons.phone_outlined,
-                        title: 'Phone',
+                        title: TranslationKeys.profile.phone.tr(),
                         subtitle: profile.phone,
                         onTap: () {},
                       ),
                     if (profile.role.isNotEmpty)
                       _ProfileListTile(
                         icon: Icons.badge_outlined,
-                        title: 'Role',
+                        title: TranslationKeys.profile.role.tr(),
                         subtitle: profile.role.toUpperCase(),
                         onTap: () {},
                       ),
                     _ProfileListTile(
                       icon: Icons.favorite_outline_rounded,
-                      title: 'Wishlist',
-                      subtitle: '${profile.wishlist.length} saved items',
+                      title: TranslationKeys.profile.wishlist.tr(),
+                      subtitle: '${profile.wishlist.length} ${TranslationKeys.profile.savedItemsSuffix.tr()}',
                       onTap: () {
                         context.push('/wishlist');
                       },
                     ),
                     _ProfileListTile(
                       icon: Icons.location_on_outlined,
-                      title: 'Saved Addresses',
-                      subtitle: '${profile.addresses.length} addresses',
+                      title: TranslationKeys.profile.savedAddresses.tr(),
+                      subtitle: '${profile.addresses.length} ${TranslationKeys.profile.addressesSuffix.tr()}',
                       onTap: () {
                         context.push('/saved-address');
                       },
                     ),
                     _ProfileListTile(
                       icon: Icons.shield_outlined,
-                      title: 'Privacy policy',
+                      title: TranslationKeys.profile.privacyPolicy.tr(),
                       onTap: () {
                         context.push('/privacy-policy');
                       },
                     ),
                     _ProfileListTile(
                       icon: Icons.chat_bubble_outline_rounded,
-                      title: 'Contact us',
+                      title: TranslationKeys.profile.contactUs.tr(),
                       onTap: () {},
                     ),
                     _ProfileListTile(
                       icon: Icons.article_outlined,
-                      title: 'Terms of Service',
+                      title: TranslationKeys.profile.termsOfService.tr(),
                       onTap: () {},
                     ),
                     _ProfileListTile(
                       icon: Icons.people_outline_rounded,
-                      title: 'Invite Friends',
+                      title: TranslationKeys.profile.inviteFriends.tr(),
                       onTap: () {},
                     ),
                     _ProfileListTile(
                       icon: Icons.power_settings_new_rounded,
-                      title: 'Sign out',
+                      title: TranslationKeys.profile.signOut.tr(),
                       onTap: () => _handleLogout(context, ref),
                     ),
                   ],
@@ -229,7 +233,7 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Failed to load profile',
+                    TranslationKeys.profile.failedToLoadProfile.tr(),
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -244,7 +248,7 @@ class ProfileScreen extends ConsumerWidget {
                   ElevatedButton.icon(
                     onPressed: () => ref.invalidate(userProfileProvider),
                     icon: const Icon(Icons.refresh_rounded),
-                    label: const Text('Try Again'),
+                    label: Text(TranslationKeys.profile.tryAgain.tr()),
                   ),
                 ],
               ),

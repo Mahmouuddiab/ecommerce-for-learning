@@ -8,6 +8,15 @@ class TranslationKeys {
   static const Settings settings = Settings();
   static const Address address = Address();
   static const Cart cart = Cart();
+  static const Home home = Home();
+  static const Navigation navigation = Navigation();
+  static const Profile profile = Profile();
+  static const PrivacyPolicy privacyPolicy = PrivacyPolicy();
+  static const Wishlist wishlist = Wishlist();
+  static const Checkout checkout = Checkout();
+  static const Category category = Category();
+  static const ProductDetails productDetails = ProductDetails();
+  static const SubCategoryProducts subCategoryProducts = SubCategoryProducts();
 }
 
 class SignUp {
@@ -126,4 +135,131 @@ class Cart {
   final String totalPrice = "cart.total_price";
   final String currencyEgp = "cart.currency_egp";
   final String checkOut = "cart.check_out";
+}
+
+class Home {
+  const Home();
+  final String popularCategories = "home.popular_categories";
+  final String noCategoriesFound = "home.no_categories_found";
+  final String popularBrands = "home.popular_brands";
+  final String noBrandsFound = "home.no_brands_found";
+}
+
+class Navigation {
+  const Navigation();
+  final String home = "navigation.home";
+  final String categories = "navigation.categories";
+  final String wishlist = "navigation.wishlist";
+  final String profile = "navigation.profile";
+}
+
+class Profile {
+  const Profile();
+  final String logoutTitle = "profile.logout_title";
+  final String logoutConfirmMessage = "profile.logout_confirm_message";
+  final String cancel = "profile.cancel";
+  final String logout = "profile.logout";
+  final String defaultAvatarLetter = "profile.default_avatar_letter";
+  final String phone = "profile.phone";
+  final String role = "profile.role";
+  final String wishlist = "profile.wishlist";
+  final String savedItemsSuffix = "profile.saved_items_suffix";
+  final String savedAddresses = "profile.saved_addresses";
+  final String addressesSuffix = "profile.addresses_suffix";
+  final String privacyPolicy = "profile.privacy_policy";
+  final String contactUs = "profile.contact_us";
+  final String termsOfService = "profile.terms_of_service";
+  final String inviteFriends = "profile.invite_friends";
+  final String signOut = "profile.sign_out";
+  final String failedToLoadProfile = "profile.failed_to_load_profile";
+  final String tryAgain = "profile.try_again";
+}
+
+class PrivacyPolicy {
+  const PrivacyPolicy();
+  final String title = "privacy_policy.title";
+  final String headerTitle = "privacy_policy.header_title";
+  final String lastUpdated = "privacy_policy.last_updated";
+  final String headerSubtitle = "privacy_policy.header_subtitle";
+  final String section1Title = "privacy_policy.section_1_title";
+  final String section1Content = "privacy_policy.section_1_content";
+  final String section2Title = "privacy_policy.section_2_title";
+  final String section2Content = "privacy_policy.section_2_content";
+  final String section3Title = "privacy_policy.section_3_title";
+  final String section3Content = "privacy_policy.section_3_content";
+  final String section4Title = "privacy_policy.section_4_title";
+  final String section4Content = "privacy_policy.section_4_content";
+  final String section5Title = "privacy_policy.section_5_title";
+  final String section5Content = "privacy_policy.section_5_content";
+  final String haveQuestions = "privacy_policy.have_questions";
+  final String contactSupportSubtitle = "privacy_policy.contact_support_subtitle";
+  final String contactButton = "privacy_policy.contact_button";
+}
+
+class Wishlist {
+  const Wishlist();
+  final String title = "wishlist.title";
+  final String defaultSuccessMessage = "wishlist.default_success_message";
+  final String failedToLoad = "wishlist.failed_to_load";
+  final String tryAgain = "wishlist.try_again";
+  final String emptyWishlistTitle = "wishlist.empty_wishlist_title";
+  final String emptyWishlistSubtitle = "wishlist.empty_wishlist_subtitle";
+}
+
+class Checkout {
+  const Checkout();
+  final String title = "checkout.title";
+  final String orderCreatedSuccess = "checkout.order_created_success";
+  final String noAddressesTitle = "checkout.no_addresses_title";
+  final String addNewAddress = "checkout.add_new_address";
+  final String placeCashOrder = "checkout.place_cash_order";
+  final String errorLoadingAddresses = "checkout.error_loading_addresses";
+  final String tryAgain = "checkout.try_again";
+  final String reviewDialogTitle = "checkout.review_dialog_title";
+  final String reviewDialogSubtitle = "checkout.review_dialog_subtitle";
+  final String ratingTerrible = "checkout.rating_terrible";
+  final String ratingBad = "checkout.rating_bad";
+  final String ratingOkay = "checkout.rating_okay";
+  final String ratingGood = "checkout.rating_good";
+  final String ratingExcellent = "checkout.rating_excellent";
+  final String reviewHint = "checkout.review_hint";
+  final String skip = "checkout.skip";
+  final String submit = "checkout.submit";
+  final String reviewAddedSuccess = "checkout.review_added_success";
+}
+
+class Category {
+  const Category();
+  final String noCategoriesFound = "category.no_categories_found";
+  final String upToFiftyPercentOff = "category.up_to_fifty_percent_off";
+  final String shopNow = "category.shop_now";
+  final String noSubCategoriesAvailable = "category.no_sub_categories_available";
+  final String retry = "category.retry";
+}
+
+class ProductDetails {
+  const ProductDetails();
+  final String title = "product_details.title";
+  final String addedToCartSuccess = "product_details.added_to_cart_success";
+  final String sold = "product_details.sold";
+  final String description = "product_details.description";
+  final String readLess = "product_details.read_less";
+  final String readMore = "product_details.read_more";
+  final String size = "product_details.size";
+  final String color = "product_details.color";
+  final String totalPrice = "product_details.total_price";
+  final String currencyEgp = "product_details.currency_egp";
+  final String addToCart = "product_details.add_to_cart";
+  final String reviews = "product_details.reviews";
+  final String failedToLoadReviews = "product_details.failed_to_load_reviews";
+  final String noReviewsYet = "product_details.no_reviews_yet";
+}
+
+class SubCategoryProducts {
+  const SubCategoryProducts();
+  final String addedToCartSuccess = "subcategory_products.added_to_cart_success";
+  final String wishlistUpdatedSuccess = "subcategory_products.wishlist_updated_success";
+  final String failedToLoad = "subcategory_products.failed_to_load";
+  final String retry = "subcategory_products.retry";
+  final String noProductsAvailable = "subcategory_products.no_products_available";
 }

@@ -1,4 +1,6 @@
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/presentation/providers/category_providers.dart';
@@ -63,7 +65,9 @@ class CategoryScreen extends ConsumerWidget {
                   ),
                   data: (categories) {
                     if (categories.isEmpty) {
-                      return const Center(child: Text('No categories found.'));
+                      return Center(
+                        child: Text(TranslationKeys.category.noCategoriesFound.tr()),
+                      );
                     }
 
                     // Default to first category if none selected
@@ -171,9 +175,9 @@ class _CategoryContentSection extends ConsumerWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12.w),
                   child: PromoBanner(
-                    title: 'Up to 50% Off',
+                    title: TranslationKeys.category.upToFiftyPercentOff.tr(),
                     imageUrl: '',
-                    ctaLabel: 'Shop Now',
+                    ctaLabel: TranslationKeys.category.shopNow.tr(),
                     onShopNowTap: () {
                       // TODO: Navigate to full category listing
                     },
@@ -195,7 +199,7 @@ class _CategoryContentSection extends ConsumerWidget {
                           ),
                           SizedBox(height: 8.h),
                           Text(
-                            'No sub-categories available.',
+                            TranslationKeys.category.noSubCategoriesAvailable.tr(),
                             style: TextStyle(
                               fontSize: 13.sp,
                               color: AppColors.textSecondary,
@@ -258,7 +262,10 @@ class _ErrorState extends StatelessWidget {
               ),
             ),
             SizedBox(height: 12.h),
-            OutlinedButton(onPressed: onRetry, child: const Text('Retry')),
+            OutlinedButton(
+              onPressed: onRetry,
+              child: Text(TranslationKeys.category.retry.tr()),
+            ),
           ],
         ),
       ),
