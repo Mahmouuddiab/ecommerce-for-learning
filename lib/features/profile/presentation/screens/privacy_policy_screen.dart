@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/features/profile/presentation/widgets/policy_expansion_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,9 +14,12 @@ class PrivacyPolicyScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text(
-          'Privacy Policy',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+        title: Text(
+          TranslationKeys.privacyPolicy.title.tr(),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
         ),
         leading: IconButton(
           onPressed: () {
@@ -48,18 +53,18 @@ class PrivacyPolicyScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Your Privacy Matters',
-                    style: TextStyle(
+                  Text(
+                    TranslationKeys.privacyPolicy.headerTitle.tr(),
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: primaryBlue,
                     ),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    'Last updated: July 2026',
-                    style: TextStyle(
+                  Text(
+                    TranslationKeys.privacyPolicy.lastUpdated.tr(),
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Colors.black54,
                       fontWeight: FontWeight.w500,
@@ -67,54 +72,51 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'We are committed to protecting your personal information and your right to privacy. Please read this policy carefully.',
-                    style: TextStyle(fontSize: 14, color: Colors.black, height: 1.4),
+                    TranslationKeys.privacyPolicy.headerSubtitle.tr(),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      height: 1.4,
+                    ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
 
-            // Accordion Sections
-            const PolicyExpansionTile(
-              title: '1. Information We Collect',
+            PolicyExpansionTile(
+              title: TranslationKeys.privacyPolicy.section1Title.tr(),
               icon: Icons.assignment_outlined,
               primaryColor: primaryBlue,
-              content:
-              'We collect personal information that you provide to us such as name, email address, phone number, shipping address, and payment details when you register, make a purchase, or contact our support team.',
+              content: TranslationKeys.privacyPolicy.section1Content.tr(),
             ),
-            const PolicyExpansionTile(
-              title: '2. How We Use Your Information',
+            PolicyExpansionTile(
+              title: TranslationKeys.privacyPolicy.section2Title.tr(),
               icon: Icons.shield_outlined,
               primaryColor: primaryBlue,
-              content:
-              'Your information is used to process orders, manage your account, send transaction updates, deliver customer support, and improve our store experience. We may also send promotional offers if you opt-in.',
+              content: TranslationKeys.privacyPolicy.section2Content.tr(),
             ),
-            const PolicyExpansionTile(
-              title: '3. Data Sharing & Third Parties',
+            PolicyExpansionTile(
+              title: TranslationKeys.privacyPolicy.section3Title.tr(),
               icon: Icons.share_outlined,
               primaryColor: primaryBlue,
-              content:
-              'We only share information with trusted third-party service providers (such as payment gateways and logistics/delivery partners) strictly necessary to fulfill your orders and services.',
+              content: TranslationKeys.privacyPolicy.section3Content.tr(),
             ),
-            const PolicyExpansionTile(
-              title: '4. Data Security & Storage',
+            PolicyExpansionTile(
+              title: TranslationKeys.privacyPolicy.section4Title.tr(),
               icon: Icons.lock_outline,
               primaryColor: primaryBlue,
-              content:
-              'We implement standard security measures, including encryption and secure server infrastructure, to prevent unauthorized access, disclosure, or modification of your personal data.',
+              content: TranslationKeys.privacyPolicy.section4Content.tr(),
             ),
-            const PolicyExpansionTile(
-              title: '5. Your Rights & Choices',
+            PolicyExpansionTile(
+              title: TranslationKeys.privacyPolicy.section5Title.tr(),
               icon: Icons.person_outline,
               primaryColor: primaryBlue,
-              content:
-              'You have the right to view, update, or request the deletion of your personal data at any time through your profile settings or by contacting customer support.',
+              content: TranslationKeys.privacyPolicy.section5Content.tr(),
             ),
 
             const SizedBox(height: 24),
 
-            // Contact Us Section
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
@@ -135,32 +137,34 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     child: const Icon(Icons.support_agent, color: primaryBlue),
                   ),
                   const SizedBox(width: 14),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Have questions?',
-                          style: TextStyle(
+                          TranslationKeys.privacyPolicy.haveQuestions.tr(),
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         Text(
-                          'Contact our privacy support team',
-                          style: TextStyle(fontSize: 12, color: Colors.black54),
+                          TranslationKeys.privacyPolicy.contactSupportSubtitle
+                              .tr(),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                          ),
                         ),
                       ],
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
-                      // Action for support contact (e.g., mailto or navigate to support screen)
-                    },
-                    child: const Text(
-                      'Contact',
-                      style: TextStyle(
+                    onPressed: () {},
+                    child: Text(
+                      TranslationKeys.privacyPolicy.contactButton.tr(),
+                      style: const TextStyle(
                         color: primaryBlue,
                         fontWeight: FontWeight.bold,
                       ),

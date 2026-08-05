@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/category/presentation/screens/category_screen.dart';
 import 'package:ecommerce/features/home/presentation/screens/home_screen.dart';
@@ -16,34 +18,33 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
-  // Static list tracking our self-contained layout elements
   static const List<Widget> _appScreens = <Widget>[
-    HomeScreen(),      // Index 0
-    CategoryScreen(),  // Index 1
-    WishlistScreen(),  // Index 2
-    ProfileScreen(),   // Index 3
+    HomeScreen(),
+    CategoryScreen(),
+    WishlistScreen(),
+    ProfileScreen(),
   ];
 
-  static const List<_NavItemData> _navItems = <_NavItemData>[
+  List<_NavItemData> get _navItems => [
     _NavItemData(
       icon: Icons.home_outlined,
       activeIcon: Icons.home,
-      label: 'Home',
+      label: TranslationKeys.navigation.home.tr(),
     ),
     _NavItemData(
       icon: Icons.grid_view,
       activeIcon: Icons.grid_view_rounded,
-      label: 'Categories',
+      label: TranslationKeys.navigation.categories.tr(),
     ),
     _NavItemData(
       icon: Icons.favorite_outline,
       activeIcon: Icons.favorite,
-      label: 'Wishlist',
+      label: TranslationKeys.navigation.wishlist.tr(),
     ),
     _NavItemData(
       icon: Icons.person_outline,
       activeIcon: Icons.person,
-      label: 'Profile',
+      label: TranslationKeys.navigation.profile.tr(),
     ),
   ];
 
@@ -58,11 +59,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // IndexedStack preserves the scrolling performance and internal state of each subscreen
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _appScreens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _appScreens),
       bottomNavigationBar: _CustomBottomNavBar(
         currentIndex: _currentIndex,
         items: _navItems,

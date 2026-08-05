@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/params/review_params.dart';
 import 'package:ecommerce/features/adresses/domain/entity/saved_address_entity.dart';
 import 'package:ecommerce/features/adresses/presentation/providers/address_providers.dart';
@@ -32,7 +34,9 @@ class CheckoutScreen extends ConsumerWidget {
           if (order != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Order Created Successfully! ID: ${order.id}'),
+                content: Text(
+                  TranslationKeys.checkout.orderCreatedSuccess.tr(args: [order.id]),
+                ),
                 backgroundColor: Colors.green,
               ),
             );
@@ -57,7 +61,7 @@ class CheckoutScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Checkout'),
+        title: Text(TranslationKeys.checkout.title.tr()),
       ),
       body: addressesAsync.when(
         data: (rawAddresses) {
@@ -73,16 +77,16 @@ class CheckoutScreen extends ConsumerWidget {
                     const Icon(Icons.location_off_outlined,
                         size: 64, color: Colors.grey),
                     const SizedBox(height: 16),
-                    const Text(
-                      'No saved addresses found.\nPlease add an address before placing an order.',
+                    Text(
+                      TranslationKeys.checkout.noAddressesTitle.tr(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      style: const TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
                       onPressed: () => context.push('/add-address'),
                       icon: const Icon(Icons.add),
-                      label: const Text('Add New Address'),
+                      label: Text(TranslationKeys.checkout.addNewAddress.tr()),
                     ),
                   ],
                 ),
@@ -183,9 +187,9 @@ class CheckoutScreen extends ConsumerWidget {
                       },
                       child: orderState.isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                        'Place Cash Order',
-                        style: TextStyle(
+                          : Text(
+                        TranslationKeys.checkout.placeCashOrder.tr(),
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -202,11 +206,11 @@ class CheckoutScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Error loading addresses: $error'),
+              Text(TranslationKeys.checkout.errorLoadingAddresses.tr(args: [error.toString()])),
               const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () => ref.invalidate(getSavedAddressesProvider),
-                child: const Text('Try Again'),
+                child: Text(TranslationKeys.checkout.tryAgain.tr()),
               ),
             ],
           ),
@@ -219,7 +223,6 @@ class CheckoutScreen extends ConsumerWidget {
 // =============================================================================
 // ADD REVIEW DIALOG WIDGET
 // =============================================================================
-
 
 class AddReviewDialog extends ConsumerStatefulWidget {
   final String productId;
@@ -234,12 +237,12 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
   final _commentController = TextEditingController();
   int _selectedRating = 5;
 
-  final List<String> _ratingLabels = [
-    'Terrible',
-    'Bad',
-    'Okay',
-    'Good',
-    'Excellent!'
+  List<String> get _ratingLabels => [
+    TranslationKeys.checkout.ratingTerrible.tr(),
+    TranslationKeys.checkout.ratingBad.tr(),
+    TranslationKeys.checkout.ratingOkay.tr(),
+    TranslationKeys.checkout.ratingGood.tr(),
+    TranslationKeys.checkout.ratingExcellent.tr(),
   ];
 
   @override
@@ -299,10 +302,10 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'How was your experience?',
+              Text(
+                TranslationKeys.checkout.reviewDialogTitle.tr(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   letterSpacing: -0.3,
@@ -310,7 +313,7 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
               ),
               const SizedBox(height: 6),
               Text(
-                'Your rating helps us improve our products.',
+                TranslationKeys.checkout.reviewDialogSubtitle.tr(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
@@ -374,7 +377,7 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
                 maxLength: 250,
                 style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
-                  hintText: 'Write your review here (optional)...',
+                  hintText: TranslationKeys.checkout.reviewHint.tr(),
                   hintStyle: TextStyle(
                     fontSize: 13,
                     color: Colors.grey.shade400,
@@ -420,7 +423,7 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
                         if (context.canPop()) context.pop();
                       },
                       child: Text(
-                        'Skip',
+                        TranslationKeys.checkout.skip.tr(),
                         style: TextStyle(
                           color: Colors.grey.shade600,
                           fontWeight: FontWeight.w600,
@@ -455,14 +458,14 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
                         if (success && context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Row(
+                              content: Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.check_circle_outline,
                                     color: Colors.white,
                                   ),
-                                  SizedBox(width: 8),
-                                  Text('Review added successfully!'),
+                                  const SizedBox(width: 8),
+                                  Text(TranslationKeys.checkout.reviewAddedSuccess.tr()),
                                 ],
                               ),
                               backgroundColor: Colors.green.shade600,
@@ -485,9 +488,9 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
                           color: Colors.white,
                         ),
                       )
-                          : const Text(
-                        'Submit',
-                        style: TextStyle(
+                          : Text(
+                        TranslationKeys.checkout.submit.tr(),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),

@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/domain/entities/product_entity.dart';
@@ -40,7 +42,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Added to cart successfully! (${next.cartResponse.numOfCartItems} items)',
+              TranslationKeys.productDetails.addedToCartSuccess.tr(
+                namedArgs: {'count': '${next.cartResponse.numOfCartItems}'},
+              ),
             ),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
@@ -80,7 +84,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Product Details',
+          TranslationKeys.productDetails.title.tr(),
           style: TextStyle(
             color: const Color(0xFF004182),
             fontSize: 18.sp,
@@ -157,7 +161,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       ),
                       SizedBox(width: 8.w),
                       Text(
-                        'EGP ${effectivePrice.toStringAsFixed(0)}',
+                        '${TranslationKeys.productDetails.currencyEgp.tr()} ${effectivePrice.toStringAsFixed(0)}',
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w700,
@@ -182,7 +186,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           ),
                         ),
                         child: Text(
-                          '${widget.product.sold} Sold',
+                          '${widget.product.sold} ${TranslationKeys.productDetails.sold.tr()}',
                           style: TextStyle(
                             fontSize: 11.sp,
                             fontWeight: FontWeight.w600,
@@ -258,7 +262,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   SizedBox(height: 16.h),
 
                   Text(
-                    'Description',
+                    TranslationKeys.productDetails.description.tr(),
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w700,
@@ -288,7 +292,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               setState(() => _isExpanded = !_isExpanded);
                             },
                             child: Text(
-                              _isExpanded ? 'Read Less' : 'Read More',
+                              _isExpanded
+                                  ? TranslationKeys.productDetails.readLess.tr()
+                                  : TranslationKeys.productDetails.readMore.tr(),
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
@@ -303,7 +309,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   SizedBox(height: 16.h),
 
                   Text(
-                    'Size',
+                    TranslationKeys.productDetails.size.tr(),
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w700,
@@ -344,7 +350,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   SizedBox(height: 16.h),
 
                   Text(
-                    'Color',
+                    TranslationKeys.productDetails.color.tr(),
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w700,
@@ -368,10 +374,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           ),
                           child: isSelected
                               ? Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 18.sp,
-                                )
+                            Icons.check,
+                            color: Colors.white,
+                            size: 18.sp,
+                          )
                               : null,
                         ),
                       );
@@ -396,7 +402,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Total price',
+                      TranslationKeys.productDetails.totalPrice.tr(),
                       style: TextStyle(
                         fontSize: 12.sp,
                         color: const Color(0xFF004182).withOpacity(0.6),
@@ -404,7 +410,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     ),
                     SizedBox(height: 2.h),
                     Text(
-                      'EGP ${(effectivePrice * _quantity).toStringAsFixed(0)}',
+                      '${TranslationKeys.productDetails.currencyEgp.tr()} ${(effectivePrice * _quantity).toStringAsFixed(0)}',
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
@@ -419,10 +425,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     onPressed: isAddingToCart
                         ? null
                         : () {
-                            ref
-                                .read(cartControllerProvider.notifier)
-                                .addToCart(widget.product.id);
-                          },
+                      ref
+                          .read(cartControllerProvider.notifier)
+                          .addToCart(widget.product.id);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF004182),
                       padding: EdgeInsets.symmetric(vertical: 14.h),
@@ -432,32 +438,32 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     ),
                     child: isAddingToCart
                         ? SizedBox(
-                            height: 20.sp,
-                            width: 20.sp,
-                            child: const CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
+                      height: 20.sp,
+                      width: 20.sp,
+                      child: const CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
                         : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add_shopping_cart,
-                                color: Colors.white,
-                                size: 20.sp,
-                              ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                'Add to cart',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.add_shopping_cart,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          TranslationKeys.productDetails.addToCart.tr(),
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
                           ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -564,7 +570,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
             Row(
               children: [
                 Text(
-                  'Reviews',
+                  TranslationKeys.productDetails.reviews.tr(),
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w700,
@@ -617,7 +623,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                 SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
-                    'Failed to load reviews. Pull to refresh or tap retry.',
+                    TranslationKeys.productDetails.failedToLoadReviews.tr(),
                     style: TextStyle(color: Colors.red, fontSize: 12.sp),
                   ),
                 ),
@@ -642,7 +648,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     ),
                     SizedBox(height: 6.h),
                     Text(
-                      'No reviews yet for this product.',
+                      TranslationKeys.productDetails.noReviewsYet.tr(),
                       style: TextStyle(
                         fontSize: 12.sp,
                         color: const Color(0xFF004182).withOpacity(0.6),

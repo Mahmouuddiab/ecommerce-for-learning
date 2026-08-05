@@ -1,23 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/wishlist/domain/entities/product_wishlist_entity.dart';
 import 'package:ecommerce/features/wishlist/presentation/providers/wishlist_providers.dart';
 import 'package:ecommerce/features/wishlist/presentation/providers/wishlist_state.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class WishlistScreen extends ConsumerWidget {
   const WishlistScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Listen for wishlist state feedback (SnackBar notifications)
     ref.listen<WishlistState>(wishlistControllerProvider, (previous, next) {
       if (!context.mounted) return;
 
       if (next is WishlistSuccess) {
         final msg = next.message.isNotEmpty
             ? next.message
-            : 'Wishlist updated successfully!';
+            : TranslationKeys.wishlist.defaultSuccessMessage.tr();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(msg),
@@ -37,12 +38,11 @@ class WishlistScreen extends ConsumerWidget {
     });
 
     final wishlistAsync = ref.watch(wishlistProductsProvider);
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Wishlist',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          TranslationKeys.wishlist.title.tr(),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -80,13 +80,13 @@ class WishlistScreen extends ConsumerWidget {
               const Icon(Icons.error_outline, color: Colors.red, size: 48),
               const SizedBox(height: 12),
               Text(
-                'Failed to load wishlist',
+                TranslationKeys.wishlist.failedToLoad.tr(),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () => ref.invalidate(wishlistProductsProvider),
-                child: const Text('Try Again'),
+                child: Text(TranslationKeys.wishlist.tryAgain.tr()),
               ),
             ],
           ),
@@ -98,9 +98,7 @@ class WishlistScreen extends ConsumerWidget {
 
 class _WishlistItemCard extends ConsumerWidget {
   final ProductWishlistEntity product;
-
   const _WishlistItemCard({required this.product});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -118,7 +116,6 @@ class _WishlistItemCard extends ConsumerWidget {
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
-          // Product Image
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
@@ -139,7 +136,6 @@ class _WishlistItemCard extends ConsumerWidget {
           ),
           const SizedBox(width: 12),
 
-          // Product Details
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +202,6 @@ class _WishlistItemCard extends ConsumerWidget {
             ),
           ),
 
-          // Actions
           Column(
             children: [
               IconButton(
@@ -246,13 +241,13 @@ class _EmptyWishlistWidget extends StatelessWidget {
           children: [
             Icon(Icons.favorite_border, size: 80, color: Colors.grey[400]),
             const SizedBox(height: 16),
-            const Text(
-              'Your Wishlist is Empty',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              TranslationKeys.wishlist.emptyWishlistTitle.tr(),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
-              'Explore products and save your favorites here!',
+              TranslationKeys.wishlist.emptyWishlistSubtitle.tr(),
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),

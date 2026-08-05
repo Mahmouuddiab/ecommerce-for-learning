@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/presentation/providers/category_providers.dart';
@@ -29,7 +31,9 @@ class SubCategoryProductsScreen extends ConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Added to cart successfully! (${next.cartResponse.numOfCartItems} items)',
+              TranslationKeys.subCategoryProducts.addedToCartSuccess.tr(
+                namedArgs: {'count': '${next.cartResponse.numOfCartItems}'},
+              ),
             ),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
@@ -56,7 +60,7 @@ class SubCategoryProductsScreen extends ConsumerWidget {
       if (next is WishlistSuccess) {
         final msg = next.message.isNotEmpty
             ? next.message
-            : 'Wishlist updated successfully!';
+            : TranslationKeys.subCategoryProducts.wishlistUpdatedSuccess.tr();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(msg),
@@ -115,21 +119,27 @@ class SubCategoryProductsScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Failed to load products: $error'),
+              Text(
+                TranslationKeys.subCategoryProducts.failedToLoad.tr(
+                  namedArgs: {'error': '$error'},
+                ),
+              ),
               SizedBox(height: 12.h),
               ElevatedButton(
                 onPressed: () => ref.invalidate(
                   productsBySubCategoryProvider(subCategoryId),
                 ),
-                child: const Text('Retry'),
+                child: Text(TranslationKeys.subCategoryProducts.retry.tr()),
               ),
             ],
           ),
         ),
         data: (products) {
           if (products.isEmpty) {
-            return const Center(
-              child: Text('No products available for this subcategory.'),
+            return Center(
+              child: Text(
+                TranslationKeys.subCategoryProducts.noProductsAvailable.tr(),
+              ),
             );
           }
 
