@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/domain/entities/product_entity.dart';
@@ -7,7 +8,6 @@ import 'package:ecommerce/features/reviews/presentation/riverpod/review_provider
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 class ProductDetailsScreen extends ConsumerStatefulWidget {
   final ProductEntity product;
@@ -78,15 +78,19 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: const Color(0xFF004182),
+            color: AppColors.primary,
             size: 22.sp,
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+          },
         ),
         title: Text(
           TranslationKeys.productDetails.title.tr(),
           style: TextStyle(
-            color: const Color(0xFF004182),
+            color: AppColors.primary,
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -96,7 +100,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
           IconButton(
             icon: Icon(
               Icons.search,
-              color: const Color(0xFF004182),
+              color: AppColors.primary,
               size: 27.sp,
             ),
             onPressed: () {},
@@ -120,11 +124,11 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                 child: IconButton(
                   icon: Icon(
                     Icons.shopping_cart_outlined,
-                    color: const Color(0xFF004182),
+                    color: AppColors.primary,
                     size: 27.sp,
                   ),
                   onPressed: () {
-                    context.push('/cart');
+                    Navigator.pushNamed(context, AppRoutes.cart);
                   },
                 ),
               );
@@ -155,7 +159,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF004182),
+                            color: AppColors.primary,
                           ),
                         ),
                       ),
@@ -165,7 +169,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF004182),
+                          color: AppColors.primary,
                         ),
                       ),
                     ],
@@ -182,7 +186,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.r),
                           border: Border.all(
-                            color: const Color(0xFF004182).withOpacity(0.3),
+                            color: AppColors.primary.withValues(alpha: 0.3),
                           ),
                         ),
                         child: Text(
@@ -190,7 +194,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           style: TextStyle(
                             fontSize: 11.sp,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF004182),
+                            color: AppColors.primary,
                           ),
                         ),
                       ),
@@ -206,7 +210,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
-                          color: const Color(0xFF004182),
+                          color: AppColors.primary,
                         ),
                       ),
                       const Spacer(),
@@ -217,7 +221,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           vertical: 4.h,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF004182),
+                          color: AppColors.primary,
                           borderRadius: BorderRadius.circular(25.r),
                         ),
                         child: Row(
@@ -266,7 +270,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF004182),
+                      color: AppColors.primary,
                     ),
                   ),
                   SizedBox(height: 6.h),
@@ -283,7 +287,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                 : TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 12.sp,
-                              color: const Color(0xFF004182).withOpacity(0.7),
+                              color: AppColors.primary.withValues(alpha: 0.7),
                               height: 1.4,
                             ),
                           ),
@@ -298,7 +302,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFF004182),
+                                color: AppColors.primary,
                               ),
                             ),
                           ),
@@ -313,7 +317,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF004182),
+                      color: AppColors.primary,
                     ),
                   ),
                   SizedBox(height: 8.h),
@@ -329,7 +333,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: isSelected
-                                ? const Color(0xFF004182)
+                                ? AppColors.primary
                                 : Colors.transparent,
                           ),
                           alignment: Alignment.center,
@@ -340,7 +344,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               fontWeight: FontWeight.bold,
                               color: isSelected
                                   ? Colors.white
-                                  : const Color(0xFF004182),
+                                  : AppColors.primary,
                             ),
                           ),
                         ),
@@ -354,7 +358,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF004182),
+                      color: AppColors.primary,
                     ),
                   ),
                   SizedBox(height: 8.h),
@@ -405,7 +409,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       TranslationKeys.productDetails.totalPrice.tr(),
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: const Color(0xFF004182).withOpacity(0.6),
+                        color: AppColors.primary.withValues(alpha: 0.6),
                       ),
                     ),
                     SizedBox(height: 2.h),
@@ -414,7 +418,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF004182),
+                        color: AppColors.primary,
                       ),
                     ),
                   ],
@@ -430,7 +434,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           .addToCart(widget.product.id);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF004182),
+                      backgroundColor: AppColors.primary,
                       padding: EdgeInsets.symmetric(vertical: 14.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.r),
@@ -480,7 +484,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
       height: 240.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.r),
-        border: Border.all(color: const Color(0xFF004182).withOpacity(0.3)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
       ),
       child: Stack(
         children: [
@@ -523,7 +527,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               child: Icon(
                 Icons.favorite_border,
                 size: 20.sp,
-                color: const Color(0xFF004182),
+                color: AppColors.primary,
               ),
             ),
           ),
@@ -544,9 +548,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   width: isSelected ? 20.w : 6.w,
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? const Color(0xFF004182)
+                        ? AppColors.primary
                         : Colors.transparent,
-                    border: Border.all(color: const Color(0xFF004182)),
+                    border: Border.all(color: AppColors.primary),
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                 );
@@ -574,7 +578,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF004182),
+                    color: AppColors.primary,
                   ),
                 ),
                 SizedBox(width: 6.w),
@@ -584,7 +588,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
-                      color: const Color(0xFF004182).withOpacity(0.5),
+                      color: AppColors.primary.withValues(alpha: 0.5),
                     ),
                   ),
                   orElse: () => const SizedBox.shrink(),
@@ -595,7 +599,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               icon: Icon(
                 Icons.refresh,
                 size: 18.sp,
-                color: const Color(0xFF004182),
+                color: AppColors.primary,
               ),
               onPressed: () {
                 ref.invalidate(productReviewsProvider(widget.product.id));
@@ -613,9 +617,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
           error: (error, stack) => Container(
             padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
-              color: Colors.red.withOpacity(0.05),
+              color: Colors.red.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: Colors.red.withOpacity(0.2)),
+              border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
             ),
             child: Row(
               children: [
@@ -636,14 +640,14 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 24.h),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF004182).withOpacity(0.04),
+                  color: AppColors.primary.withValues(alpha: 0.04),
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
                   children: [
                     Icon(
                       Icons.rate_review_outlined,
-                      color: const Color(0xFF004182).withOpacity(0.3),
+                      color: AppColors.primary.withValues(alpha: 0.3),
                       size: 28.sp,
                     ),
                     SizedBox(height: 6.h),
@@ -651,7 +655,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       TranslationKeys.productDetails.noReviewsYet.tr(),
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: const Color(0xFF004182).withOpacity(0.6),
+                        color: AppColors.primary.withValues(alpha: 0.6),
                       ),
                     ),
                   ],
@@ -688,10 +692,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: const Color(0xFF004182).withOpacity(0.08)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.08)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF004182).withOpacity(0.05),
+            color: AppColors.primary.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -704,11 +708,11 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
             children: [
               CircleAvatar(
                 radius: 16.r,
-                backgroundColor: const Color(0xFF004182).withOpacity(0.1),
+                backgroundColor: AppColors.primary.withValues(alpha: 0.1),
                 child: Text(
                   initial,
                   style: TextStyle(
-                    color: const Color(0xFF004182),
+                    color: AppColors.primary,
                     fontWeight: FontWeight.bold,
                     fontSize: 13.sp,
                   ),
@@ -723,7 +727,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF004182),
+                    color: AppColors.primary,
                   ),
                 ),
               ),
@@ -748,7 +752,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 12.sp,
-                color: const Color(0xFF004182).withOpacity(0.75),
+                color: AppColors.primary.withValues(alpha: 0.75),
                 height: 1.35,
               ),
             ),

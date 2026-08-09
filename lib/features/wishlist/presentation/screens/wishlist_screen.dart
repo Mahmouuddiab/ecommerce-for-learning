@@ -40,6 +40,7 @@ class WishlistScreen extends ConsumerWidget {
     final wishlistAsync = ref.watch(wishlistProductsProvider);
     return Scaffold(
       appBar: AppBar(
+        leading: SizedBox(),
         title: Text(
           TranslationKeys.wishlist.title.tr(),
           style: const TextStyle(fontWeight: FontWeight.bold),

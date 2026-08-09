@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/auth/domain/entities/verify_code_entity.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyCodeScreen extends ConsumerStatefulWidget {
@@ -58,7 +58,11 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
 
             Future.delayed(const Duration(milliseconds: 500), () {
               if (context.mounted) {
-                context.goNamed('reset-password', extra: widget.email);
+                Navigator.pushReplacementNamed(
+                  context,
+                  AppRoutes.resetPassword,
+                  arguments: widget.email,
+                );
               }
             });
           }
@@ -182,10 +186,10 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
                     onPressed: isLoading
                         ? null
                         : () {
-                            ref
-                                .read(authControllerProvider.notifier)
-                                .forgotPassword(widget.email);
-                          },
+                      ref
+                          .read(authControllerProvider.notifier)
+                          .forgotPassword(widget.email);
+                    },
                     child: Text(
                       TranslationKeys.verifyCode.resendCode.tr(),
                       style: TextStyle(

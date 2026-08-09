@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/auth/domain/entities/reset_password_entity.dart';
 import 'package:ecommerce/features/auth/presentation/providers/auth_providers.dart';
@@ -58,12 +59,16 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                   TranslationKeys.resetPassword.resetSuccessMessage.tr(),
                 ),
                 backgroundColor: Colors.green,
-                duration: Duration(seconds: 3),
+                duration: const Duration(seconds: 3),
               ),
             );
 
-            // Pop back to the initial/login screen
-            Navigator.popUntil(context, (route) => route.isFirst);
+            // Pop back to the initial route or redirect explicitly to login
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.login,
+                  (route) => false,
+            );
           }
         },
         error: (error, stackTrace) {

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/presentation/providers/category_providers.dart';
@@ -9,7 +10,6 @@ import 'package:ecommerce/features/wishlist/presentation/providers/wishlist_stat
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 class SubCategoryProductsScreen extends ConsumerWidget {
   final String subCategoryId;
@@ -96,10 +96,8 @@ class SubCategoryProductsScreen extends ConsumerWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: AppColors.primary, size: 22.sp),
           onPressed: () {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go('/home'); // Fallback route if stack is empty
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
             }
           },
         ),
@@ -169,7 +167,11 @@ class SubCategoryProductsScreen extends ConsumerWidget {
                   product: product,
                   isFavorite: isFavorite,
                   onTap: () {
-                    context.push('/product-details', extra: product);
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.productDetails,
+                      arguments: product,
+                    );
                   },
                   onAddToCartTap: () {
                     ref
@@ -177,7 +179,8 @@ class SubCategoryProductsScreen extends ConsumerWidget {
                         .addToCart(product.id);
                   },
                   onFavoriteTap: () {
-                    final controller = ref.read(wishlistControllerProvider.notifier);
+                    final controller =
+                    ref.read(wishlistControllerProvider.notifier);
                     if (isFavorite) {
                       controller.removeFromWishlist(product.id);
                     } else {

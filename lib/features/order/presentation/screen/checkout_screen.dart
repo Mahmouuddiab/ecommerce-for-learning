@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/params/review_params.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/features/adresses/domain/entity/saved_address_entity.dart';
 import 'package:ecommerce/features/adresses/presentation/providers/address_providers.dart';
 import 'package:ecommerce/features/order/domain/entity/order_entity.dart';
@@ -9,7 +10,6 @@ import 'package:ecommerce/features/reviews/presentation/riverpod/review_provider
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:go_router/go_router.dart';
 
 final selectedAddressIdProvider = StateProvider<String?>((ref) => null);
 
@@ -29,6 +29,8 @@ class CheckoutScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<OrderEntity?>>(orderControllerProvider, (previous, next) {
+      if (!context.mounted) return;
+
       next.whenOrNull(
         data: (order) {
           if (order != null) {
@@ -84,7 +86,9 @@ class CheckoutScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
-                      onPressed: () => context.push('/add-address'),
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.addAddress);
+                      },
                       icon: const Icon(Icons.add),
                       label: Text(TranslationKeys.checkout.addNewAddress.tr()),
                     ),
@@ -206,7 +210,11 @@ class CheckoutScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(TranslationKeys.checkout.errorLoadingAddresses.tr(args: [error.toString()])),
+              Text(
+                TranslationKeys.checkout.errorLoadingAddresses.tr(
+                  args: [error.toString()],
+                ),
+              ),
               const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () => ref.invalidate(getSavedAddressesProvider),
@@ -258,6 +266,8 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
 
     // Listen for submission errors
     ref.listen(addReviewNotifierProvider, (prev, next) {
+      if (!context.mounted) return;
+
       if (next is AsyncError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -419,8 +429,12 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
                       onPressed: reviewState.isLoading
                           ? null
                           : () {
-                        Navigator.of(context).pop();
-                        if (context.canPop()) context.pop();
+                        if (Navigator.canPop(context)) {
+                          Navigator.pop(context); // Dismiss dialog
+                        }
+                        if (Navigator.canPop(context)) {
+                          Navigator.pop(context); // Pop CheckoutScreen
+                        }
                       },
                       child: Text(
                         TranslationKeys.checkout.skip.tr(),
@@ -465,7 +479,11 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
                                     color: Colors.white,
                                   ),
                                   const SizedBox(width: 8),
-                                  Text(TranslationKeys.checkout.reviewAddedSuccess.tr()),
+                                  Text(
+                                    TranslationKeys.checkout
+                                        .reviewAddedSuccess
+                                        .tr(),
+                                  ),
                                 ],
                               ),
                               backgroundColor: Colors.green.shade600,
@@ -475,8 +493,13 @@ class _AddReviewDialogState extends ConsumerState<AddReviewDialog> {
                               ),
                             ),
                           );
-                          Navigator.of(context).pop();
-                          if (context.canPop()) context.pop();
+
+                          if (Navigator.canPop(context)) {
+                            Navigator.pop(context); // Dismiss dialog
+                          }
+                          if (Navigator.canPop(context)) {
+                            Navigator.pop(context); // Pop CheckoutScreen
+                          }
                         }
                       },
                       child: reviewState.isLoading

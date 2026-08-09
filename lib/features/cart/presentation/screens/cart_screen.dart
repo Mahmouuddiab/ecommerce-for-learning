@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/cart/presentation/widgets/cart_item.dart';
 import 'package:ecommerce/features/cart/presentation/widgets/checkout_bottom_bar.dart';
-import 'package:ecommerce/features/order/presentation/screen/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,10 +12,10 @@ class CartScreen extends ConsumerWidget {
   const CartScreen({super.key});
 
   Future<void> _showDeleteConfirmationDialog(
-    BuildContext context,
-    WidgetRef ref,
-    String productId,
-  ) async {
+      BuildContext context,
+      WidgetRef ref,
+      String productId,
+      ) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -27,10 +27,14 @@ class CartScreen extends ConsumerWidget {
           content: Text(TranslationKeys.cart.deleteConfirmMessage.tr()),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
+              onPressed: () {
+                if (Navigator.canPop(dialogContext)) {
+                  Navigator.pop(dialogContext);
+                }
+              },
               child: Text(
                 TranslationKeys.cart.cancel.tr(),
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             ElevatedButton(
@@ -42,7 +46,9 @@ class CartScreen extends ConsumerWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.of(dialogContext).pop();
+                if (Navigator.canPop(dialogContext)) {
+                  Navigator.pop(dialogContext);
+                }
                 ref
                     .read(cartControllerProvider.notifier)
                     .deleteFromCart(productId);
@@ -58,6 +64,8 @@ class CartScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AddToCartState>(cartControllerProvider, (previous, next) {
+      if (!context.mounted) return;
+
       if (next is AddToCartSuccess) {
         ref.invalidate(cartProductsProvider);
         ScaffoldMessenger.of(context)
@@ -66,7 +74,7 @@ class CartScreen extends ConsumerWidget {
             SnackBar(
               content: Text(TranslationKeys.cart.productRemovedSuccess.tr()),
               backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
+              duration: const Duration(seconds: 2),
             ),
           );
       } else if (next is AddToCartError) {
@@ -88,7 +96,7 @@ class CartScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           TranslationKeys.cart.title.tr(),
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: AppColors.primary,
           ),
@@ -137,11 +145,10 @@ class CartScreen extends ConsumerWidget {
                 CheckoutBottomBar(
                   totalAmount: totalAmount,
                   onCheckout: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => CheckoutScreen(cartId: cartId),
-                      ),
+                      AppRoutes.checkout,
+                      arguments: cartId,
                     );
                   },
                 ),
@@ -199,12 +206,12 @@ class _EmptyCartView extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             TranslationKeys.cart.emptyCartTitle.tr(),
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             TranslationKeys.cart.emptyCartSubtitle.tr(),
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),
