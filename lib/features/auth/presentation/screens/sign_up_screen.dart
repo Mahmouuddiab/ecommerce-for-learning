@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/params/register_params.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
 import 'package:ecommerce/features/auth/domain/entities/user_entity.dart';
@@ -157,7 +158,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     questionText: TranslationKeys.signUp.alreadyHaveAccount.tr(),
                     actionText: TranslationKeys.signUp.login.tr(),
                     onTap: () {
-                      context.goNamed('login');
+                      Navigator.pushReplacementNamed(context, AppRoutes.login);
                     },
                   ),
                   SizedBox(height: 20.h),

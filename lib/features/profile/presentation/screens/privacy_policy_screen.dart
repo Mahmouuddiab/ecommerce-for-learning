@@ -1,40 +1,36 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
+import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/profile/presentation/widgets/policy_expansion_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryBlue = Color(0xFF1976D2);
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: theme.colorScheme.surfaceContainerLowest,
       appBar: AppBar(
         title: Text(
           TranslationKeys.privacyPolicy.title.tr(),
-          style: const TextStyle(
+          style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
           ),
         ),
         leading: IconButton(
           onPressed: () {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go('/');
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
             }
           },
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: theme.colorScheme.surface,
         elevation: 0.5,
-        iconTheme: const IconThemeData(color: Colors.black87),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
@@ -46,9 +42,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: primaryBlue.withOpacity(0.08),
+                color: AppColors.primary.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: primaryBlue.withOpacity(0.2)),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.2),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,24 +56,24 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: primaryBlue,
+                      color: AppColors.primary,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     TranslationKeys.privacyPolicy.lastUpdated.tr(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: Colors.black54,
+                      color: theme.hintColor,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     TranslationKeys.privacyPolicy.headerSubtitle.tr(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black,
+                      color: theme.colorScheme.onSurface,
                       height: 1.4,
                     ),
                   ),
@@ -87,44 +85,45 @@ class PrivacyPolicyScreen extends StatelessWidget {
             PolicyExpansionTile(
               title: TranslationKeys.privacyPolicy.section1Title.tr(),
               icon: Icons.assignment_outlined,
-              primaryColor: primaryBlue,
+              primaryColor: AppColors.primary,
               content: TranslationKeys.privacyPolicy.section1Content.tr(),
             ),
             PolicyExpansionTile(
               title: TranslationKeys.privacyPolicy.section2Title.tr(),
               icon: Icons.shield_outlined,
-              primaryColor: primaryBlue,
+              primaryColor: AppColors.primary,
               content: TranslationKeys.privacyPolicy.section2Content.tr(),
             ),
             PolicyExpansionTile(
               title: TranslationKeys.privacyPolicy.section3Title.tr(),
               icon: Icons.share_outlined,
-              primaryColor: primaryBlue,
+              primaryColor: AppColors.primary,
               content: TranslationKeys.privacyPolicy.section3Content.tr(),
             ),
             PolicyExpansionTile(
               title: TranslationKeys.privacyPolicy.section4Title.tr(),
               icon: Icons.lock_outline,
-              primaryColor: primaryBlue,
+              primaryColor: AppColors.primary,
               content: TranslationKeys.privacyPolicy.section4Content.tr(),
             ),
             PolicyExpansionTile(
               title: TranslationKeys.privacyPolicy.section5Title.tr(),
               icon: Icons.person_outline,
-              primaryColor: primaryBlue,
+              primaryColor: AppColors.primary,
               content: TranslationKeys.privacyPolicy.section5Content.tr(),
             ),
 
             const SizedBox(height: 24),
 
+            // Support Contact Card
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: theme.colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
+                    color: Colors.black.withValues(alpha: 0.04),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -133,8 +132,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: primaryBlue.withOpacity(0.1),
-                    child: const Icon(Icons.support_agent, color: primaryBlue),
+                    backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                    child: const Icon(
+                      Icons.support_agent,
+                      color: AppColors.primary,
+                    ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -152,9 +154,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                         Text(
                           TranslationKeys.privacyPolicy.contactSupportSubtitle
                               .tr(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: Colors.black54,
+                            color: theme.hintColor,
                           ),
                         ),
                       ],
@@ -165,7 +167,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                     child: Text(
                       TranslationKeys.privacyPolicy.contactButton.tr(),
                       style: const TextStyle(
-                        color: primaryBlue,
+                        color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

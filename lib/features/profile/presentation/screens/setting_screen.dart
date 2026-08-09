@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
+import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/profile/presentation/widgets/language_option_tile.dart';
 import 'package:ecommerce/features/profile/presentation/widgets/setting_tile.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,27 +15,31 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool isLanguageExpanded = true;
+  bool isLanguageExpanded = false;
   bool isNotificationsEnabled = false;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final isArabic = context.locale.languageCode == 'ar';
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: const Color(0xFF0D253F),
+            Icons.arrow_back_ios_new_rounded,
+            color: theme.colorScheme.onSurface,
             size: 20.sp,
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+          },
         ),
         title: Text(
           TranslationKeys.settings.title.tr(),
-          style: TextStyle(
-            color: const Color(0xFF0D3866),
+          style: theme.textTheme.titleMedium?.copyWith(
             fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
@@ -47,7 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             // 1. My Profile Tile
             SettingsTile(
-              icon: Icons.person_outline,
+              icon: Icons.person_outline_rounded,
               title: TranslationKeys.settings.myProfile.tr(),
               onTap: () {},
             ),
@@ -55,7 +60,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             // 2. Language Expandable Tile
             SettingsTile(
-              icon: Icons.language,
+              icon: Icons.language_rounded,
               title: TranslationKeys.settings.language.tr(),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -65,16 +70,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ? TranslationKeys.settings.arabic.tr()
                         : TranslationKeys.settings.english.tr(),
                     style: TextStyle(
-                      color: Colors.grey.shade600,
+                      color: theme.hintColor,
                       fontSize: 14.sp,
                     ),
                   ),
                   SizedBox(width: 4.w),
                   Icon(
                     isLanguageExpanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: Colors.grey.shade600,
+                        ? Icons.keyboard_arrow_up_rounded
+                        : Icons.keyboard_arrow_down_rounded,
+                    color: theme.hintColor,
                     size: 20.sp,
                   ),
                 ],
@@ -118,12 +123,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             // 3. Notifications Tile
             SettingsTile(
-              icon: Icons.notifications_none_outlined,
+              icon: Icons.notifications_none_rounded,
               title: TranslationKeys.settings.notifications.tr(),
               trailing: Transform.scale(
                 scale: 0.85,
                 child: CupertinoSwitch(
-                  activeColor: const Color(0xFF00B2E3),
+                  activeColor: AppColors.primary,
                   value: isNotificationsEnabled,
                   onChanged: (bool value) {
                     setState(() {

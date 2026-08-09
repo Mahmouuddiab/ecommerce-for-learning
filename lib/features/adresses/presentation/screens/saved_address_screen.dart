@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/features/adresses/domain/entity/saved_address_entity.dart';
 import 'package:ecommerce/features/adresses/presentation/providers/address_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class SavedAddressScreen extends ConsumerWidget {
   const SavedAddressScreen({super.key});
@@ -14,6 +14,8 @@ class SavedAddressScreen extends ConsumerWidget {
     ref.listen<AsyncValue<SavedAddressEntity?>>(
       deleteAddressControllerProvider,
           (previous, next) {
+        if (!context.mounted) return;
+
         if (next.hasError && !next.isLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -71,7 +73,7 @@ class SavedAddressScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          context.push('/add-address');
+          Navigator.pushNamed(context, AppRoutes.addAddress);
         },
         icon: const Icon(Icons.add),
         label: Text(TranslationKeys.address.addNewAddress.tr()),
@@ -167,12 +169,18 @@ class _AddressCard extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
+            onPressed: () {
+              if (Navigator.canPop(dialogContext)) {
+                Navigator.pop(dialogContext);
+              }
+            },
             child: Text(TranslationKeys.address.cancel.tr()),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(dialogContext);
+              if (Navigator.canPop(dialogContext)) {
+                Navigator.pop(dialogContext);
+              }
               ref
                   .read(deleteAddressControllerProvider.notifier)
                   .deleteAddress(address.id);

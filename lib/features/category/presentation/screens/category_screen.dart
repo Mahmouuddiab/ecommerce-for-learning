@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/features/cart/presentation/providers/cart_providers.dart';
 import 'package:ecommerce/features/category/presentation/providers/category_providers.dart';
@@ -12,7 +13,6 @@ import 'package:ecommerce/shared/app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 /// Notifier Provider to manage the selected category ID
 class SelectedCategoryIdNotifier extends Notifier<String?> {
@@ -48,7 +48,7 @@ class CategoryScreen extends ConsumerWidget {
               AppHeader(
                 cartItemCount: cartItemCount,
                 onCartTap: () {
-                  context.push('/cart');
+                  Navigator.pushNamed(context, AppRoutes.cart);
                 },
                 onSearchChanged: (query) {
                   // TODO: Implement search behavior
@@ -66,7 +66,9 @@ class CategoryScreen extends ConsumerWidget {
                   data: (categories) {
                     if (categories.isEmpty) {
                       return Center(
-                        child: Text(TranslationKeys.category.noCategoriesFound.tr()),
+                        child: Text(
+                          TranslationKeys.category.noCategoriesFound.tr(),
+                        ),
                       );
                     }
 
@@ -199,7 +201,8 @@ class _CategoryContentSection extends ConsumerWidget {
                           ),
                           SizedBox(height: 8.h),
                           Text(
-                            TranslationKeys.category.noSubCategoriesAvailable.tr(),
+                            TranslationKeys.category.noSubCategoriesAvailable
+                                .tr(),
                             style: TextStyle(
                               fontSize: 13.sp,
                               color: AppColors.textSecondary,
@@ -213,9 +216,10 @@ class _CategoryContentSection extends ConsumerWidget {
                   SubCategoryGrid(
                     items: subCategories,
                     onItemTap: (item) {
-                      context.push(
-                        '/sub-category-products',
-                        extra: {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.subCategoryProducts,
+                        arguments: {
                           'subCategoryId': item.id,
                           'subCategoryName': item.name,
                         },

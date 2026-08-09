@@ -54,21 +54,25 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
           (previous, next) {
         next.whenOrNull(
           data: (address) {
-            if (address != null) {
+            if (address != null && context.mounted) {
               CustomSnackBar.show(
-                  context: context,
-                  message: TranslationKeys.address.addressAddedSuccess.tr(),
-                  type: SnackBarType.success
+                context: context,
+                message: TranslationKeys.address.addressAddedSuccess.tr(),
+                type: SnackBarType.success,
               );
-              Navigator.pop(context);
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
             }
           },
           error: (error, _) {
-            CustomSnackBar.show(
+            if (context.mounted) {
+              CustomSnackBar.show(
                 context: context,
                 message: error.toString(),
-                type: SnackBarType.error
-            );
+                type: SnackBarType.error,
+              );
+            }
           },
         );
       },
@@ -81,7 +85,7 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
       appBar: AppBar(
         title: Text(
           TranslationKeys.address.addNewAddress.tr(),
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         elevation: 0,
@@ -201,7 +205,7 @@ class _AddAddressScreenState extends ConsumerState<AddAddressScreen> {
             )
                 : Text(
               TranslationKeys.address.saveAddress.tr(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),

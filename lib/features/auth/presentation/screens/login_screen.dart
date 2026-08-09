@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecommerce/core/localization/translation_keys.dart';
 import 'package:ecommerce/core/params/login_params.dart';
+import 'package:ecommerce/core/router/app_routes.dart';
 import 'package:ecommerce/core/screens/main_navigation_screen.dart';
 import 'package:ecommerce/core/utils/app_colors.dart';
 import 'package:ecommerce/core/validator/app_validator.dart';
@@ -143,7 +144,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () {
-                        context.goNamed('forgot-password');
+                        Navigator.pushNamed(context, AppRoutes.forgotPassword);
                       },
                       child: Text(
                         TranslationKeys.login.forgotPassword.tr(),
@@ -171,7 +172,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       questionText: TranslationKeys.login.dontHaveAccount.tr(),
                       actionText: TranslationKeys.login.createAccount.tr(),
                       onTap: () {
-                        context.goNamed('sign-up');
+                        Navigator.pushReplacementNamed(context, AppRoutes.signUp);
                       },
                     ),
                   ),
